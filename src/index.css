@@ -19,22 +19,33 @@ code {
 }
 
 .countries {
-  display: flex;
+  /* display: flex;
   flex-direction: column;
   justify-content: space-around;
   align-items: center;
   justify-content: center;
   text-align: center;
-  margin: 10px 20px;
+  margin: 10px 20px; */
+
+  display: grid;
+  grid-gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 }
 
 .country-div {
-  width: 100%;
   word-wrap: break-word;
-  margin: 10px 5px;
+  margin: 15px 10px;
   padding: 10px;
   border-radius: 10px;
   box-shadow: 1px 2px 13px 0px rgba(0,0,0,0.75);
   -webkit-box-shadow: 1px 2px 13px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 1px 2px 13px 0px rgba(0,0,0,0.75);
 }
+
+.country-div:hover {
+  padding: 7px;
+  box-shadow: 1px 2px 13px 0px rgb(29, 248, 182);
+  -webkit-box-shadow: 1px 2px 13px 0px rgb(29, 248, 182);
+  -moz-box-shadow: 1px 2px 13px 0px rgb(29, 248, 182);
+}
+

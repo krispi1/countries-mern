@@ -1,3 +1,7 @@
+# [Countries MERN](https://countriesmern.netlify.com/) 🚀
+
+[![Netlify Status](https://api.netlify.com/api/v1/badges/7a816f7c-ef98-4ba3-be44-d8b006031b8c/deploy-status)](https://countriesmern.netlify.com/)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

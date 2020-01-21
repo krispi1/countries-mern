@@ -4,7 +4,7 @@ function Countries({ countries }) {
   return (
     <div className="countries">
       {
-        countries && countries.map(country => {
+        countries && countries.map((country, index) => {
           const { 
             name, topLevelDomain, alpha2Code, alpha3Code,
             callingCodes, capital, region, subregion, 
@@ -17,12 +17,12 @@ function Countries({ countries }) {
             name, topLevelDomain[0], callingCodes[0],
             capital, region, subregion, population, '\n\n'
           );
-          return <div className="country-div" key={name}>
+          return <div className="country-div" key={index}>
             <h1><strong>{name.toUpperCase()}</strong></h1>
             <img 
               src={flag} 
               width={"100%"} 
-              minHeight={40} 
+              min-height={40} 
               alt={`${name} flag`} 
               style={{ 
                 padding: "5px",
