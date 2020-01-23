@@ -1,18 +1,39 @@
-/****Countries-MERN****
+/****Countries MERN****
 
 ****Architecture
-***Frontend
-***Backend
 
-/src/
+***Backend
+>>Structure
+/api
+  /controllers
+  /models
+  /routes
+  -server.js
+
+>>API
+  Method  |  URI                            |  Login required?
+->POST       /register                         false
+->POST       /login                            false
+->POST       /logout                           true
+->GET        /:username                        true
+->PATCH      /:username/edit                   true
+->DELETE     /:username/del                    true
+->POST       /:username/notes                  true
+->GET        /:username/notes                  false
+->GET        /:username/notes/:noteId          false
+->PATCH      /:username/notes/:noteId/edit     true
+->DELETE     /:username/notes/:noteId/del      true
+
+***Frontend
+>>Structure
+/src
   /components/
   /contexts/
 
-
 **Components
 ->Navbar
-->Sign Up
-->Sign In
+->Register
+->Login
 ->Countries
   >>https://restcountries.eu/rest/v2/all
 ->Country
@@ -87,11 +108,11 @@
 ->Countries
 
 
-
 RESPONSE EXAMPLE
 https://restcountries.eu/rest/v2/alpha/col
 
-[{
+[
+  {
     "name": "Colombia",
     "topLevelDomain": [".co"],
     "alpha2Code": "CO",
@@ -110,17 +131,21 @@ https://restcountries.eu/rest/v2/alpha/col
     "borders": ["BRA", "ECU", "PAN", "PER", "VEN"],
     "nativeName": "Colombia",
     "numericCode": "170",
-    "currencies": [{
+    "currencies": [
+      {
         "code": "COP",
         "name": "Colombian peso",
         "symbol": "$"
-    }],
-    "languages": [{
+      }
+    ],
+    "languages": [
+      {
         "iso639_1": "es",
         "iso639_2": "spa",
         "name": "Spanish",
         "nativeName": "Español"
-    }],
+      }
+    ],
     "translations": {
         "de": "Kolumbien",
         "es": "Colombia",
@@ -131,18 +156,22 @@ https://restcountries.eu/rest/v2/alpha/col
         "pt": "Colômbia"
     },
     "flag": "https://restcountries.eu/data/col.svg",
-    "regionalBlocs": [{
+    "regionalBlocs": [
+      {
         "acronym": "PA",
         "name": "Pacific Alliance",
         "otherAcronyms": [],
         "otherNames": ["Alianza del Pacífico"]
-    }, {
-        "acronym": "USAN",
-        "name": "Union of South American Nations",
-        "otherAcronyms": ["UNASUR", "UNASUL", "UZAN"],
-        "otherNames": ["Unión de Naciones Suramericanas", "União de Nações Sul-Americanas", "Unie van Zuid-Amerikaanse Naties", "South American Union"]
-    }],
+      }, 
+      {
+          "acronym": "USAN",
+          "name": "Union of South American Nations",
+          "otherAcronyms": ["UNASUR", "UNASUL", "UZAN"],
+          "otherNames": ["Unión de Naciones Suramericanas", "União de Nações Sul-Americanas", "Unie van Zuid-Amerikaanse Naties", "South American Union"]
+      }
+    ],
     "cioc": "COL"
-}]
+  }
+]
 
 */

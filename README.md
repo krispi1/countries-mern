@@ -2,6 +2,8 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7a816f7c-ef98-4ba3-be44-d8b006031b8c/deploy-status)](https://countriesmern.netlify.com/)
 
+#### Status == work-in-progress
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -71,5 +73,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
-#### References:
+### References:
 1. [Fetching data with useEffect](https://www.robinwieruch.de/react-hooks-fetch-data)
+2. [How to memoize components in React](https://medium.com/@rossbulat/how-to-memoize-in-react-3d20cbcd2b6e)

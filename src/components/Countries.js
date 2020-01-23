@@ -1,6 +1,7 @@
 import React from 'react'
 
 function Countries({ countries }) {
+  console.log('Countries rendering...');
   return (
     <div className="countries">
       {
@@ -13,10 +14,11 @@ function Countries({ countries }) {
             languages, translations, flag, regionalBlocs
           } = country;
           
-          console.log(
+          /* console.log(
             name, topLevelDomain[0], callingCodes[0],
             capital, region, subregion, population, '\n\n'
-          );
+          ); */
+
           return <div className="country-div" key={index}>
             <h1><strong>{name.toUpperCase()}</strong></h1>
             <img 
@@ -34,8 +36,12 @@ function Countries({ countries }) {
               }
             </p>
             <p>
-              {`Region: ${region}, Sub Region: ${region}, 
-                Population: ${population}, Latitude: ${latlng[0]}, Longitude: ${latlng[1]}`
+              {`Region: ${region}, Sub Region: ${subregion}, 
+                Population: ${population}}`
+              }
+            </p>
+            <p>
+              {`Top Level Domain: ${topLevelDomain}, Latitude: ${latlng[0]}, Longitude: ${latlng[1]}`
               }
             </p>
             <p>
