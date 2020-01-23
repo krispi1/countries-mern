@@ -1,8 +1,6 @@
 const mongoose = require('mongoose');
 
-const Schema = mongoose.Schema();
-
-const NoteSchema = new Schema(
+const NoteSchema = mongoose.Schema(
   {
     user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
     subject: { type: String, required: true },

@@ -6,8 +6,8 @@ const cors       = require('cors');
 const logger     = require('morgan');
 
 // Custom routers
-// const exercisesRouter = require('./routes/exercises');
-// const usersRouter     = require('./routes/users');
+const usersRouter     = require('./routes/user.routes');
+const authRouter      = require('./routes/auth.routes');
 
 // Global app constants
 const app        = express();
@@ -36,9 +36,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(logger('tiny'));
-///////////////////////////////////
-// app.use('/exercises', exercisesRouter);
-// app.use('/users', usersRouter);
+app.use('/users', usersRouter);
+app.use('/auth', authRouter);
 
 // Invoke server
 app.listen(PORT, () => {

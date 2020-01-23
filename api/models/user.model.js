@@ -1,21 +1,20 @@
 const mongoose = require('mongoose');
-const bcrypt = require('bcryptjs');
+// const bcrypt = require('bcrypt');
 
-const Schema = mongoose.Schema();
-
-const UserSchema = new Schema(
+const UserSchema = mongoose.Schema(
   {
-    userName: { type: String, required: true, unique: true },
+    username: { type: String, required: true, unique: true },
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     createdAt: { type: Date, default: Date.now },
-    notes: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Note' }]
+    notes: []
   }, 
   {
     timestamps: true
   }
 );
 
+/* 
 UserSchema.pre('save', async function(next) {
   try {
     if (!this.isModified('password')) {
@@ -38,6 +37,7 @@ UserSchema.methods.comparePassword = async function(attempt, next) {
     next(err);
   }
 }
+*/
 
 const User = mongoose.model('User', UserSchema);
 

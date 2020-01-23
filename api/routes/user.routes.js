@@ -1,23 +1,24 @@
 const router   = require('express').Router();
 
-const isLoggedIn = require('../middleware/check-auth');
+// const isLoggedIn = require('../middleware/check-auth');
 
 // UC --> UserControllers
 const UC = require('../controllers/user.controllers');
 
-// POST --> Create a user: Sign-up
-router.post('/signup', UC.createUser);
+// GET --> Fetch all users
+router.get('/', UC.fetchAllUsers);
 
-// POST --> Login user
-router.post('/login', UC.loginUser);
+// GET --> Fetch a single user
+router.get('/:userId', UC.fetchSingleUser);
+
+// PATCH --> Edit user
+router.patch('/:userId/edit', UC.editUser);
 
 // DELETE --> Delete user
-router.delete('/:userId', isLoggedIn, UC.deleteUser);
+router.delete('/:userId/del', UC.deleteUser);
 
 module.exports = router;
 
-// POST   /signup             --> Create a user
-// POST   /login              --> Login user
 // GET    /users              --> Fetch all users
 // GET    /users/:userId      --> Fetch a single user
 // DELETE /users/:userId/del  --> Delete user

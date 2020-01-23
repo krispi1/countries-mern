@@ -76,3 +76,5 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 ### References:
 1. [Fetching data with useEffect](https://www.robinwieruch.de/react-hooks-fetch-data)
 2. [How to memoize components in React](https://medium.com/@rossbulat/how-to-memoize-in-react-3d20cbcd2b6e)
+3. [Mongoose queries](https://mongoosejs.com/docs/api.html#model_Model.findById)
+

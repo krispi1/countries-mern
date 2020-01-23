@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, memo, useCallback } from 'react';
+import React, { createContext, useState, useEffect, memo, useMemo } from 'react';
 import axios from 'axios';
 
 export const CountriesContext = createContext();
@@ -7,37 +7,34 @@ const SetContext = ({ children }) => {
   console.log('SetContext rendering...');
   const [countries, setCountries] = useState([]);
   
-  const fetchData = useCallback(
-    async () => {
-      if (JSON.parse(window.localStorage.getItem('countries')) <= 0) {
-        const result = await axios(
-          'https://restcountries.eu/rest/v2/all'
-        );
+  
+  const fetchData = async () => {
+    if (JSON.parse(window.localStorage.getItem('countries')) <= 0) {
+      const result = await axios(
+        'https://restcountries.eu/rest/v2/all'
+      );
 
-        // Cache with localStorage
-        console.log('Sending to localStorage..');
-        window.localStorage.setItem(
-          'countries', JSON.stringify(result.data)
-        );
+      // Cache with localStorage
+      console.log('Sending to localStorage..');
+      window.localStorage.setItem(
+        'countries', JSON.stringify(result.data)
+      );
 
-        // Populate countries state
-        setCountries(
-          JSON.parse(window.localStorage.getItem('countries'))
-        );
-      }
-      else {
-        // Retrieve from the localStorage
-        setCountries(
-          JSON.parse(window.localStorage.getItem('countries'))
-        );
-        console.log('Pulling from localStorage..');
-      }
-    }, // fetchData
-  []) // useCallback
+      // Populate countries state
+      setCountries(
+        JSON.parse(window.localStorage.getItem('countries'))
+      );
+    }
+    else {
+      // Retrieve from the localStorage
+      setCountries(
+        JSON.parse(window.localStorage.getItem('countries'))
+      );
+      console.log('Pulling from localStorage..');
+    }
+  } // fetchData
 
-  useEffect(() => {
-    fetchData();
-  }, [fetchData]);
+  useMemo(fetchData, []);
   
   return (
     <CountriesContext.Provider value={{ countries }}>
