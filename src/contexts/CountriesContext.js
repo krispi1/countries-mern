@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect, memo, useMemo } from 'react';
+import React, { createContext, useState, memo, useMemo } from 'react';
 import axios from 'axios';
 
 export const CountriesContext = createContext();
@@ -6,7 +6,6 @@ export const CountriesContext = createContext();
 const SetContext = ({ children }) => {
   console.log('SetContext rendering...');
   const [countries, setCountries] = useState([]);
-  
   
   const fetchData = async () => {
     if (JSON.parse(window.localStorage.getItem('countries')) <= 0) {
@@ -46,6 +45,9 @@ const SetContext = ({ children }) => {
 const CountriesProvider = memo(SetContext);
 
 export default CountriesProvider;
+
+
+
 
 /* 
 import React, {useEffect, useState} from 'react';

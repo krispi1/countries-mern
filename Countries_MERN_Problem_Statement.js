@@ -4,6 +4,7 @@
 
 ***Backend
 >>Structure
+
 /api
   /controllers
   /models
@@ -11,20 +12,25 @@
   -server.js
 
 >>API
-  Method  |  URI                            |  Login required?
-->POST       /register                         false
-->POST       /login                            false
-->POST       /logout                           true
-->GET        /:username                        true
-->PATCH      /:username/edit                   true
-->DELETE     /:username/del                    true
-->POST       /:username/notes                  true
-->GET        /:username/notes                  false
-->GET        /:username/notes/:noteId          false
-->PATCH      /:username/notes/:noteId/edit     true
-->DELETE     /:username/notes/:noteId/del      true
+
+  Method  |  URI                              |  Login required?
+->POST       /auth/signup                        false
+->POST       /auth/login                         false
+->POST       /auth/logout                        true
+
+->GET        users/                              false
+->GET        users/:userId                       false
+->PATCH      users/:userId/edit                  true
+->DELETE     users/:userId/del                   true
+
+->POST       users/:userId/notes                 true
+->GET        users/:userId/notes                 false
+->GET        users/:userId/notes/:noteId         false
+->PATCH      users/:userId/notes/:noteId/edit    true
+->DELETE     users/:userId/notes/:noteId/del     true
 
 ***Frontend
+
 >>Structure
 /src
   /components/
@@ -32,7 +38,7 @@
 
 **Components
 ->Navbar
-->Register
+->SignUp
 ->Login
 ->Countries
   >>https://restcountries.eu/rest/v2/all

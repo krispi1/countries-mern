@@ -13,7 +13,7 @@ function App() {
   console.log('App rendering...');
   const data = useContext(CountriesContext);
   const { countries } = data;
-  console.log(countries[135]);
+  console.log(countries[118]);
 
   return (
     <div className="App">
