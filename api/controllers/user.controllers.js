@@ -1,14 +1,17 @@
-require('mongoose');
+require('mongoose'); // Ensure mongoose is in scope
 
 const User = require('../models/user.model');
 
+// Abstract away all user controller functions 
+// with a single object: UserControllers
+// Enable "dependency injection" wherever needed
 const UserControllers = {};
 
 // GET /users --> Fetch all users
 UserControllers.fetchAllUsers = (req, res, next) => {
   User
     .find()
-    .select('_id email username notes')
+    .select('_id username notes')
     .exec()
     .then(users => {
       console.log(users);
@@ -17,9 +20,9 @@ UserControllers.fetchAllUsers = (req, res, next) => {
         users: users.map(user => {
           return {
             _id: user._id,
-            email: user.email,
             username: user.username,
-            notes: user.notes
+            notes: user.notes,
+            view_user: `http://localhost:4001/users/${user._id}`
           }
         })
       };
@@ -36,15 +39,18 @@ UserControllers.fetchAllUsers = (req, res, next) => {
 UserControllers.fetchSingleUser = (req, res, next) => {
   User
     .find({ _id: req.params.userId })
-    .select('username email notes')
+    .select('username notes')
     .exec()
     .then(user => {
       console.log(user);
-      res.status(200).json( user[0] )
+      return res.status(200).json({ 
+        user: user[0],
+        users: `http://localhost:4001/users`
+      })
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({ error: err });
+      return res.status(500).json({ error: err });
     })
 } // fetchSingleUser
 
@@ -63,7 +69,7 @@ UserControllers.editUser = (req, res, next) => {
       user
         .save()
         .then(updatedUser => {
-          res.json({
+          return res.json({
             message: 'User updated',
             updatedUser
           });
@@ -72,7 +78,7 @@ UserControllers.editUser = (req, res, next) => {
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({ error: err });
+      return res.status(500).json({ error: err });
     })
 } // editUser
 
@@ -82,19 +88,22 @@ UserControllers.deleteUser = (req, res, next) => {
     .remove({ _id: req.params.userId })
     .exec()
     .then(result => {
-      res.status(200).json({
-        message: 'User deleted!!'
+      return res.status(200).json({
+        message: 'User deleted!!',
+        login: 'http://localhost:4001/auth/login',
       })
     })
     .catch(err => {
       console.log(err);
-      res.status(500).json({
-        error: err
+      return res.status(500).json({
+        error: err,
+        go_home: 'http://localhost:4001'
       })
     })
 } // deleteUser
 
 module.exports = UserControllers;
+
 
 /* 
 
@@ -104,10 +113,10 @@ module.exports = UserControllers;
 ->DELETE  /users/:userId/del   ---done && tested
 
 // UserController routes
->>GET     /users              --> Fetch all users 
->>GET     /users/:userId      --> Fetch a single user
->>PATCH   /users/:userId/edit --> Edit user
->>DELETE  /users/:userId/del  --> Delete user
+>>GET     /users               --> Fetch all users 
+>>GET     /users/:userId       --> Fetch a single user
+>>PATCH   /users/:userId/edit  --> Edit user
+>>DELETE  /users/:userId/del   --> Delete user
 
 */
 

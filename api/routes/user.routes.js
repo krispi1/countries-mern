@@ -1,6 +1,7 @@
 const router   = require('express').Router();
 
-// const isLoggedIn = require('../middleware/check-auth');
+// For protecting routes that require log in
+const isLoggedIn = require('../middleware/check-auth');
 
 // UC --> UserControllers
 const UC = require('../controllers/user.controllers');
@@ -12,13 +13,19 @@ router.get('/', UC.fetchAllUsers);
 router.get('/:userId', UC.fetchSingleUser);
 
 // PATCH --> Edit user
-router.patch('/:userId/edit', UC.editUser);
+router.patch('/:userId/edit', isLoggedIn, UC.editUser);
 
 // DELETE --> Delete user
-router.delete('/:userId/del', UC.deleteUser);
+router.delete('/:userId/del', isLoggedIn, UC.deleteUser);
 
 module.exports = router;
 
-// GET    /users              --> Fetch all users
-// GET    /users/:userId      --> Fetch a single user
-// DELETE /users/:userId/del  --> Delete user
+
+/*
+
+->GET    /users              --> Fetch all users
+->GET    /users/:userId      --> Fetch a single user
+->PATCH  /users/:userId/edit --> Edit user
+->DELETE /users/:userId/del  --> Delete user
+
+*/

@@ -13,7 +13,7 @@
 
 >>API
 
-  Method  |  URI                              |  Login required?
+  Method     URI                                 Login required?
 ->POST       /auth/signup                        false
 ->POST       /auth/login                         false
 ->POST       /auth/logout                        true
@@ -30,8 +30,8 @@
 ->DELETE     users/:userId/notes/:noteId/del     true
 
 ***Frontend
-
 >>Structure
+
 /src
   /components/
   /contexts/
@@ -40,6 +40,7 @@
 ->Navbar
 ->SignUp
 ->Login
+->Footer
 ->Countries
   >>https://restcountries.eu/rest/v2/all
 ->Country
@@ -109,9 +110,6 @@
       >>https://restcountries.eu/rest/v2/{service}?fields={field};{field};{field}
         https://restcountries.eu/rest/v2/all?fields=name;capital;currencies
 
-->Footer
-->Countries
-->Countries
 
 
 RESPONSE EXAMPLE
