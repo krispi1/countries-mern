@@ -3,8 +3,8 @@ require('mongoose'); // Ensure mongoose is in scope
 const User = require('../models/user.model');
 
 // Abstract away all user controller functions 
-// with a single object: UserControllers
-// Enable "dependency injection" wherever needed
+// with a single object, UserControllers.
+// This enables "dependency injection" wherever needed.
 const UserControllers = {};
 
 // GET /users --> Fetch all users
@@ -44,7 +44,11 @@ UserControllers.fetchSingleUser = (req, res, next) => {
     .then(user => {
       console.log(user);
       return res.status(200).json({ 
-        user: user[0],
+        _id: user[0]._id,
+        username: user[0].username,
+        notes: user[0].notes,
+        user_notes: `http://localhost:4001/notes/${user[0].username}`,
+        all_notes: `http://localhost:4001/notes`,
         users: `http://localhost:4001/users`
       })
     })
@@ -97,7 +101,7 @@ UserControllers.deleteUser = (req, res, next) => {
       console.log(err);
       return res.status(500).json({
         error: err,
-        go_home: 'http://localhost:4001'
+        go_home: 'http://localhost:4001'  
       })
     })
 } // deleteUser

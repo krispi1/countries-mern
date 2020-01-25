@@ -7,6 +7,7 @@ const cors          = require('cors');
 const logger        = require('morgan');
 
 // Custom routers
+const notesRouter   = require('./routes/note.routes');
 const usersRouter   = require('./routes/user.routes');
 const authRouter    = require('./routes/auth.routes');
 
@@ -39,20 +40,20 @@ function connectToDB(dbURI) {
     ))
 } // connectToDB
 
-// Middlewares
+ // Middlewares
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
 app.use(logger('tiny'));
+app.use('/notes', notesRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 
 // Routes
 app.get('/', (req, res) => res.send({
-  Welcome: "We are glad you are here.",
+  message: "Welcome.",
   users: 'http://localhost:4001/users'
 }));
-
 
 // Fallback error handler for 404 page-not-found
 app.use((req, res, next) => {

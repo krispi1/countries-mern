@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken'); // For signing token
 const User = require('../models/user.model');
 
 // Abstract away all auth controller functions 
-// with a single object: AuthControllers
-// Enable "dependency injection" wherever needed
+// with a single object, AuthControllers.
+// This enables "dependency injection" wherever needed.
 const AuthControllers = {};
 
 // POST /auth/signup --> Create a user
