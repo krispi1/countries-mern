@@ -145,6 +145,16 @@ Solution:
 
 I placed appropriate return statements in all proper places.
 
+Scenario 3 -- Fixed.
+
+--------logs--------
+1. Request to /login initiated..
+3. In bcrypt.compare block: Checking password..
+5. In bcrypt.compare (result) block: Password check passed..
+6. In bcrypt.compare (result) block: Token generated..
+7. In bcrypt.compare (result) block: Login successful..
+POST /auth/login 200 261 - 2215.476 ms
+
 ////////////////////////////////////////////////////////////
 Problem api4
 

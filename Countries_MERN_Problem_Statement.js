@@ -1,33 +1,42 @@
 /****Countries MERN****
 
 ****Architecture
+Backend: Node, Express
+Frontend: React
 
 ***Backend
 >>Structure
 
 /api
   /controllers
+  /middleware
   /models
   /routes
   -server.js
 
 >>API
-
-  Method     URI                                 Login required?
-->POST       /auth/signup                        false
-->POST       /auth/login                         false
-->POST       /auth/logout                        true
-
-->GET        users/                              false
-->GET        users/:userId                       false
-->PATCH      users/:userId/edit                  true
-->DELETE     users/:userId/del                   true
-
-->POST       users/:userId/notes                 true
-->GET        users/:userId/notes                 false
-->GET        users/:userId/notes/:noteId         false
-->PATCH      users/:userId/notes/:noteId/edit    true
-->DELETE     users/:userId/notes/:noteId/del     true
+          
+Segment     Method     URI                                  Login required?
+---------------------------------------------------------------------------
+Auth
+          ->POST       /auth/signup                         false
+          ->POST       /auth/login                          false
+          ->POST       /auth/logout                         true
+---------------------------------------------------------------------------
+Users      
+          ->GET        /users/                              false
+          ->GET        /users/:userId                       false
+          ->PATCH      /users/:userId/edit                  true
+          ->DELETE     /users/:userId/del                   true
+---------------------------------------------------------------------------
+Notes     
+          ->POST       /notes/:username/notes               true
+          ->GET        /notes                               false
+          ->GET        /notes/:username/notes               false
+          ->GET        /notes/:username/notes/:noteId       false
+          ->PATCH      /notes/:username/notes/:noteId/edit  true
+          ->DELETE     /notes/:username/notes/:noteId/del   true
+---------------------------------------------------------------------------
 
 ***Frontend
 >>Structure
