@@ -3,7 +3,7 @@ require('mongoose'); // Ensure mongoose is in scope
 const bcrypt = require('bcrypt'); // For encrypting password
 const jwt = require('jsonwebtoken'); // For signing token
 
-const User = require('../models/user.model');
+const User = require('../models/user.model'); // User model
 
 // Abstract away all auth controller functions 
 // with a single object, AuthControllers.
@@ -53,7 +53,7 @@ AuthControllers.createUser = (req, res, next) => {
     }) // then
 } // createUser
 
-// POST /auth/login --> Login user
+// POST /auth/login --> Log user in
 AuthControllers.loginUser = (req, res, next) => {
   console.log('--------logs--------\n1. Request to /login initiated..');
   User
@@ -125,6 +125,9 @@ AuthControllers.loginUser = (req, res, next) => {
     })
 } // loginUser
 
+// POST /auth/login --> Log user out
+AuthControllers.logoutUser = (req, res, next) => {} // logoutUser
+
 module.exports = AuthControllers;
 
 
@@ -134,9 +137,12 @@ module.exports = AuthControllers;
 ->POST    /auth/login       ---done && tested
 ->POST    /auth/logout      ---not done && not tested
 
-// AuthControllers routes
->>POST    /auth/signup      --> Create a user 
->>POST    /auth/login       --> Log user in
->>POST    /auth/logout      --> Log user out
+// AuthControllers routes & handler functions
+
+Method  Route          Function       Purpose
+
+POST    /auth/signup   createUser     Create a user 
+POST    /auth/login    loginUser      Log user in
+POST    /auth/logout   logoutUser     Log user out
 
 */

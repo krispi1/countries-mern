@@ -1,7 +1,7 @@
 require('mongoose'); // Ensure mongoose is in scope
 
-const User = require('../models/user.model');
-const Note = require('../models/note.model');
+const User = require('../models/user.model'); // User model
+const Note = require('../models/note.model'); // Note model
 
 // Abstract away all note controller functions 
 // with a single object, NoteControllers.
@@ -37,7 +37,7 @@ NoteControllers.createNote = (req, res, next) => {
     })
 } // createNote
 
-// GET /notes --> Retrieve all notes of all users
+// GET /notes --> Retrieve all notes for all users
 NoteControllers.fetchAllNotes = (req, res, next) => {
   console.log(`All notes of all users route requested..`);
   User
@@ -108,7 +108,7 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
     })
 } // fetchAllUserNotes
 
-// GET /notes/:username/notes/:noteId --> Retrieve a single note of a user
+// GET /notes/:username/notes/:noteId --> Retrieve a single note for a user
 NoteControllers.fetchSingleNote = (req, res, next) => {
   console.log(`>>A single note of a user route requested..`);
   User
@@ -137,6 +137,12 @@ NoteControllers.fetchSingleNote = (req, res, next) => {
     })
 } // fetchSingleNote
 
+// PATCH /notes/:username/notes/:noteId/edit --> Edit a note
+NoteControllers.editNote = (req, res, next) => {}
+
+// DELETE /notes/:username/notes/:noteId/del --> Delete a note
+NoteControllers.deleteNote = (req, res, next) => {}
+
 module.exports = NoteControllers;
 
 
@@ -149,12 +155,15 @@ module.exports = NoteControllers;
 ->PATCH    /notes/:username/notes/:noteId/edit  ---not done && not tested
 ->DELETE   /notes/:username/notes/:noteId/del   ---not done && not tested
 
-// NoteControllers routes
->>POST     /notes/:username/                    --> Create a note for a user
->>GET      /notes                               --> Retrieve all notes of all users
->>GET      /notes/:username/                    --> Retrieve all of a user's notes
->>GET      /notes/:username/notes/:noteId       --> Retrieve a single note of a user
->>PATCH    /notes/:username/notes/:noteId/edit  --> Edit a note
->>DELETE   /notes/:username/notes/:noteId/del   --> Delete a note
+// NoteControllers routes & handler functions
+
+Method   Route                                 Function             Purpose
+
+POST     /notes/:username/                     createNote           Create a note for a user
+GET      /notes                                fetchAllNotes        Retrieve all notes for all users
+GET      /notes/:username/                     fetchAllUserNotes    Retrieve all of a user's notes
+GET      /notes/:username/notes/:noteId        fetchSingleNote      Retrieve a single note for a user
+PATCH    /notes/:username/notes/:noteId/edit   editNote             Edit a note
+DELETE   /notes/:username/notes/:noteId/del    deleteNote           Delete a note
 
 */

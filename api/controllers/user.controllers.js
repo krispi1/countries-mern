@@ -1,6 +1,6 @@
 require('mongoose'); // Ensure mongoose is in scope
 
-const User = require('../models/user.model');
+const User = require('../models/user.model'); // User model
 
 // Abstract away all user controller functions 
 // with a single object, UserControllers.
@@ -58,13 +58,14 @@ UserControllers.fetchSingleUser = (req, res, next) => {
     })
 } // fetchSingleUser
 
-// PATCH /users/:userId/edit
+// PATCH /users/:userId/edit --> Edit user
 UserControllers.editUser = (req, res, next) => {
   User
     .findById(req.params.userId)
     .select('username email')
     .exec()
     .then(user => {
+      // Avoid null assignment to blank fields
       user.username = req.body.username ?
         req.body.username : user.username;
       user.email = req.body.email ?
@@ -86,7 +87,7 @@ UserControllers.editUser = (req, res, next) => {
     })
 } // editUser
 
-// DELETE /users/:userId --> Delete user
+// DELETE /users/:userId/del --> Delete user
 UserControllers.deleteUser = (req, res, next) => {
   User
     .remove({ _id: req.params.userId })
@@ -116,11 +117,13 @@ module.exports = UserControllers;
 ->PATCH   /users/:userId/edit  ---done && tested
 ->DELETE  /users/:userId/del   ---done && tested
 
-// UserController routes
->>GET     /users               --> Fetch all users 
->>GET     /users/:userId       --> Fetch a single user
->>PATCH   /users/:userId/edit  --> Edit user
->>DELETE  /users/:userId/del   --> Delete user
+// UserController routes & handler functions 
+
+Method   Route                 Function           Purpose
+
+GET      /users                fetchAllUsers      Fetch all users 
+GET      /users/:userId        fetchSingleUser    Fetch a single user
+PATCH    /users/:userId/edit   editUser           Edit user
+DELETE   /users/:userId/del    deleteUser         Delete user
 
 */
-
