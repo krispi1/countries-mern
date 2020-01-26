@@ -1,50 +1,94 @@
 /****Countries MERN****
 
+---------------------------------------------------------------------------
 ****Architecture
-Backend: Node, Express
-Frontend: React
 
+>>Stack --> MERN
+
+>>Backend: 
+
+Package            Purpose
+-----------------------------------------------------------------------
+Node              Runtime engine
+Express           Server
+Express.Router()  Shipped with Express. Handles routing
+Bcrypt            Encrypt password (1-way), validate login-provided password
+Cors              Enable cross-origin (inter-domain) resource sharing
+Dotenv            Load environment variables
+JSONWebToken      Sign user parameters and generate auth token
+Mongoose          ORM to abstract away MongoDB operations
+MongoDB           Data persistence store
+Morgan            Log api requests to the console
+
+>>Frontend:
+
+Package           Purpose
+-----------------------------------------------------------------------
+React             Frontend library
+ReactDOM          Manage DOM internally and render elements in React
+Axios             Handle frontend<-->backend communication
+
+
+---------------------------------------------------------------------------
 ***Backend
+
 >>Structure
 
 /api
   /controllers
+    auth.controllers.js
+    note.controllers.js
+    user.controllers.js
   /middleware
+    check-auth.js
   /models
+    note.model.js
+    user.model.js
   /routes
-  -server.js
+    auth.routes.js
+    note.routes.js
+    user.routes.js
+  .gitignore
+  package-lock.json
+  package.json
+  server.js
 
+---------------------------------------------------------------------------
 >>API
           
-Segment     Method     URI                                  Login required?
----------------------------------------------------------------------------
+Segment   Method   URI                                 Login required?
+-----------------------------------------------------------------------
 Auth
-          ->POST       /auth/signup                         false
-          ->POST       /auth/login                          false
-          ->POST       /auth/logout                         true
----------------------------------------------------------------------------
+          POST     /auth/signup                         false
+          POST     /auth/login                          false
+          POST     /auth/logout                         true
+-----------------------------------------------------------------------
 Users      
-          ->GET        /users/                              false
-          ->GET        /users/:userId                       false
-          ->PATCH      /users/:userId/edit                  true
-          ->DELETE     /users/:userId/del                   true
----------------------------------------------------------------------------
+          GET      /users/                              false
+          GET      /users/:userId                       false
+          PATCH    /users/:userId/edit                  true
+          DELETE   /users/:userId/del                   true
+-----------------------------------------------------------------------
 Notes     
-          ->POST       /notes/:username/notes               true
-          ->GET        /notes                               false
-          ->GET        /notes/:username/notes               false
-          ->GET        /notes/:username/notes/:noteId       false
-          ->PATCH      /notes/:username/notes/:noteId/edit  true
-          ->DELETE     /notes/:username/notes/:noteId/del   true
+          POST     /notes/:username/notes               true
+          GET      /notes                               false
+          GET      /notes/:username/notes               false
+          GET      /notes/:username/notes/:noteId       false
+          PATCH    /notes/:username/notes/:noteId/edit  true
+          DELETE   /notes/:username/notes/:noteId/del   true
 ---------------------------------------------------------------------------
 
+---------------------------------------------------------------------------
 ***Frontend
+
 >>Structure
 
 /src
+  /assets/
   /components/
   /contexts/
 
+---------------------------------------------------------------------------
 **Components
 ->Navbar
 ->SignUp
@@ -120,7 +164,7 @@ Notes
         https://restcountries.eu/rest/v2/all?fields=name;capital;currencies
 
 
-
+---------------------------------------------------------------------------
 RESPONSE EXAMPLE
 https://restcountries.eu/rest/v2/alpha/col
 
@@ -186,5 +230,7 @@ https://restcountries.eu/rest/v2/alpha/col
     "cioc": "COL"
   }
 ]
+
+---------------------------------------------------------------------------
 
 */
