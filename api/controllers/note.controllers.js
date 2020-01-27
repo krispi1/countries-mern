@@ -10,81 +10,52 @@ const NoteControllers = {};
 
 // POST /notes/:username --> Create a note
 NoteControllers.createNote = (req, res, next) => {
-  console.log('Request to createNote initiated..');
-  const note = new Note({
-    subject: req.body.subject,
-    country: req.body.country,
-    stateOrCity: req.body.stateOrCity,
-    town: req.body.town,
-    content: req.body.content
-  });
-  console.log(note);
+  console.log('\ncreateNote invoked...');
+  
   User
-    .find({ _id: req.params.username })
-    .exec()
+    .find({ username: req.params.username })
+    .select('_id')
     .then(user => {
-      user[0].notes.push(note);
-      user[0].save()
-      
-      return res.status(200).json({
-        message: 'Note created and saved successfully.',
-        user: user[0]
-      })
+      const note = new Note({
+        user: user[0]._id,
+        subject: req.body.subject,
+        country: req.body.country,
+        stateOrCity: req.body.stateOrCity,
+        town: req.body.town,
+        content: req.body.content
+      });
+
+      note
+        .save()
+        .then(note => res.status(200).json({
+          message: 'Note created & saved successfully.',
+          note
+        }))
+        .catch(err => {
+          console.log(err);
+          return res.status(500).json({
+            error: err
+          })
+        })
+      return;
     })
     .catch(err => {
       console.log(err);
-      return res.status(500).json({ error: err});
+      return res.status(500).json(err)
     })
 } // createNote
 
 // GET /notes --> Retrieve all notes for all users
 NoteControllers.fetchAllNotes = (req, res, next) => {
-  console.log(`All notes of all users route requested..`);
-  User
-    .find({})
-    .select('_id username notes')
+  console.log(`\nfetchAllNotes invoked...`);
+  Note
+    .find()
+    .select('_id subject country stateOrCity town content user')
     .exec()
-    .then(users => {
-      const responses = (users.map(user => {
-        if (user.notes.length > 0) {
-          return {
-            notes: user.notes.map(note => {
-              return {
-                _id: note._id,
-                subject: note.subject,
-                country: note.country,
-                stateOrCity: note.stateOrCity,
-                town: note.town,
-                content: note.content,
-                view_note: `http://localhost:4001/notes/${user.username}/notes/${note._id}`,
-                view_user: `http://localhost:4001/users/${user._id}`,
-                all_users: `http://localhost:4001/users`
-              }
-            }) // user.notes.map
-          };
-        };
-      })) // users.map
-      return res.status(200).json(responses.filter(response => response != null));
-    }) // then
-    .catch(err => {
-      console.log(err);
-      return res.status(500).json({ error: err});
-    })
-} // fetchAllNotes
+    .then(notes => {
 
-// GET /notes/:username --> Retrieve all of a user's notes
-NoteControllers.fetchAllUserNotes = (req, res, next) => {
-  console.log(`All of a user's notes route requested..`);
-  User
-    .find({ username: req.params.username })
-    .select('_id username notes')
-    .exec()
-    .then(user => {
-      console.log(user);
-      const response = {
-        count: user[0].notes.length,
-        username: user[0].username,
-        notes: user[0].notes.map(note => {
+      return res.status(200).json(
+        notes.map(note => {
           return {
             _id: note._id,
             subject: note.subject,
@@ -92,68 +63,162 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
             stateOrCity: note.stateOrCity,
             town: note.town,
             content: note.content,
-            view_note: `http://localhost:4001/notes/${user[0].username}/notes/${note._id}`,
-          };
-        }),
-        view_user: `http://localhost:4001/users/${user[0]._id}`,
-        all_notes: `http://localhost:4001/notes`,
-        all_users: `http://localhost:4001/users`
-      }; // response
-
-      return res.status(200).json(response);
+            user: note.user,
+            more_links: { 
+              view_user: `http://localhost:4001/users/${note.user}`
+            }
+          }
+        })
+      );
     })
     .catch(err => {
       console.log(err);
-      return res.status(500).json({ error: err });
+      return res.status(500).json(err)
+    })
+} // fetchAllNotes
+
+// GET /notes/:username --> Retrieve all of a user's notes
+NoteControllers.fetchAllUserNotes = (req, res, next) => {
+  console.log(`\nfetchAllUserNotes invoked...`);
+  User
+    .find({ username: req.params.username })
+    .select('_id username')
+    .then(user => {
+
+      Note
+        .find({ user: user[0]._id })
+        .select('_id subject country stateOrCity town content user')
+        .exec()
+        .then(notes => {
+          const userNotes = notes.map(note => {
+            return {
+              _id: note._id,
+              subject: note.subject,
+              country: note.country,
+              stateOrCity: note.stateOrCity,
+              town: note.town,
+              content: note.content,
+              user: note.user
+            }
+          })
+          return res.status(200).json({
+            notes: userNotes,
+            more_links: {
+              all_notes: `http://localhost:4001/notes`,
+              view_user: `http://localhost:4001/users/${user[0].username}`,
+              all_users: `http://localhost:4001/users`
+            }
+          });
+        })
+        .catch(err => {
+          console.log(err);
+          return res.status(500).json(err)
+        })
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json(err)
     })
 } // fetchAllUserNotes
 
 // GET /notes/:username/notes/:noteId --> Retrieve a single note for a user
 NoteControllers.fetchSingleNote = (req, res, next) => {
-  console.log(`>>A single note of a user route requested..`);
-  User
-    .find({ username: req.params.username })
-    .select()
+  console.log(`\nfetchSingleNote invoked...`);
+  Note
+    .find({ _id: req.params.noteId })
+    .select('_id subject country stateOrCity town content user')
     .exec()
-    .then(user => {
-      const note = 
-        user[0]
-          .notes
-          .filter(note => {
-            // Cast to String to allow deep equality comparison
-            return String(note._id) === String(req.params.noteId);
-          });
+    .then(note => {
+      console.log(note);
       return res.status(200).json({
         note,
-        user_notes:`http://localhost:4001/notes/${user[0].username}`, 
-        all_notes: `http://localhost:4001/notes`,
-        view_user: `http://localhost:4001/users/${user[0]._id}`,
-        all_users: `http://localhost:4001/users`
-      })
+        more_links: {
+          user_notes: `http://localhost:4001/notes/${req.params.username}`,
+          all_notes: `http://localhost:4001/notes`,
+          view_user: `http://localhost:4001/users/${req.params.username}`,
+          all_users: `http://localhost:4001/users`
+        }
+      });
     })
     .catch(err => {
       console.log(err);
-      return res.status(500).json({ error: err });
+      return res.status(500).json(err)
     })
 } // fetchSingleNote
 
 // PATCH /notes/:username/notes/:noteId/edit --> Edit a note
-NoteControllers.editNote = (req, res, next) => {}
+NoteControllers.editNote = (req, res, next) => {
+  console.log(`\neditNote invoked...`);
+  Note
+    .findById({ _id: req.params.noteId })
+    .select('subject country stateOrCity town content')
+    .exec()
+    .then(note => {
+      // Avoid null assignment to blank fields
+      note.subject = req.body.subject ?
+        req.body.subject : note.subject;
+      note.country = req.body.country ?
+        req.body.country : note.country;
+      note.stateOrCity = req.body.stateOrCity ?
+        req.body.stateOrCity : note.stateOrCity;
+      note.town = req.body.town ?
+        req.body.town : note.town;
+      note.content = req.body.content ?
+        req.body.content : note.content;
+
+      note
+        .save()
+        .then(updatedNote => {
+          return res.status(200).json({
+            message: 'Note updated',
+            updatedNote
+          });
+        })
+        .catch(err => res.status(400).json({ error: err }))
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json(err)
+    })
+} // editNote
 
 // DELETE /notes/:username/notes/:noteId/del --> Delete a note
-NoteControllers.deleteNote = (req, res, next) => {}
+NoteControllers.deleteNote = (req, res, next) => {
+  console.log(`\neditNote invoked...`);
+  Note
+    .remove({ _id: req.params.noteId })
+    .exec()
+    .then(result => {
+      return res.status(200).json({
+        message: 'Note deleted!!',
+        more_links: {
+          all_notes: `http://localhost:4001/notes`,
+          view_user: `http://localhost:4001/users/${req.params.username}`,
+          all_users: `http://localhost:4001/users`
+        }
+      })
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({
+        error: err,
+        go_home: 'http://localhost:4001'  
+      })
+    })  
+} // deleteNote
 
 module.exports = NoteControllers;
+
 
 
 /*
 
 ->POST     /notes/:username/                    ---done && tested
->>GET      /notes                               ---done && tested
+->GET      /notes                               ---done && tested
 ->GET      /notes/:username/                    ---done && tested
 ->GET      /notes/:username/notes/:noteId       ---done && tested
-->PATCH    /notes/:username/notes/:noteId/edit  ---not done && not tested
-->DELETE   /notes/:username/notes/:noteId/del   ---not done && not tested
+->PATCH    /notes/:username/notes/:noteId/edit  ---done && tested
+->DELETE   /notes/:username/notes/:noteId/del   ---done && tested
 
 // NoteControllers routes & handler functions
 
