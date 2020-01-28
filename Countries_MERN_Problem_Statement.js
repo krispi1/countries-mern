@@ -3,11 +3,11 @@
 ---------------------------------------------------------------------------
 ****Architecture
 
->>Stack --> MERN
+>>Stack --> MERN (MongoDB, Express, React, Node.js)
 
 >>Backend: 
 
-Package            Purpose
+Package           Purpose
 -----------------------------------------------------------------------
 Node              Runtime engine
 Express           Server
@@ -56,26 +56,26 @@ Axios             Handle frontend<-->backend communication
 ---------------------------------------------------------------------------
 >>API
           
-Segment   Method   URI                                 Login required?
+Segment   Method   URI                              Login required?
 -----------------------------------------------------------------------
 Auth
-          POST     /auth/signup                         false
-          POST     /auth/login                          false
-          POST     /auth/logout                         true
+          POST     /auth/signup                     false
+          POST     /auth/login                      false
+          POST     /auth/logout                     true
 -----------------------------------------------------------------------
 Users      
-          GET      /users/                              false
-          GET      /users/:userId                       false
-          PATCH    /users/:userId/edit                  true
-          DELETE   /users/:userId/del                   true
+          GET      /users                           false
+          GET      /users/username                  false
+          PATCH    /users/username/edit             true
+          DELETE   /users/username/del              true
 -----------------------------------------------------------------------
 Notes     
-          POST     /notes/:username/notes               true
-          GET      /notes                               false
-          GET      /notes/:username/notes               false
-          GET      /notes/:username/notes/:noteId       false
-          PATCH    /notes/:username/notes/:noteId/edit  true
-          DELETE   /notes/:username/notes/:noteId/del   true
+          POST     /notes/:username                 true
+          GET      /notes                           false
+          GET      /notes/:username                 false
+          GET      /notes/:username/:noteId         false
+          PATCH    /notes/:username/:noteId/edit    true
+          DELETE   /notes/:username/:noteId/del     true
 ---------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------
