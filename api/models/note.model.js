@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 
 const NoteSchema = mongoose.Schema(
   {
-    user: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    username : {type: mongoose.Schema.Types.String, ref: 'User'},
     subject: { type: String, required: true },
     country: { type: String, required: true },
     stateOrCity: { type: String, required: false },
