@@ -11,7 +11,7 @@ router.post('/signup', AC.createUser);
 // POST /auth/login --> Log user in
 router.post('/login', AC.loginUser);
 
-// POST /auth/logout --> Log user out
+// POST /auth/logout --> Log user out --> Login required
 router.post('/logout', isLoggedIn, AC.loginUser);
 
 module.exports = router;

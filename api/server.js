@@ -49,7 +49,7 @@ app.use('/notes', notesRouter);
 app.use('/users', usersRouter);
 app.use('/auth', authRouter);
 
-// Routes
+// Handle root route
 app.get('/', (req, res) => res.send({
   message: "Welcome.",
   users: 'http://localhost:4001/users'
@@ -58,18 +58,21 @@ app.get('/', (req, res) => res.send({
 // Fallback error handler for 404 page-not-found
 app.use((req, res, next) => {
   const error = new Error('Not found');
-  error.status = 404;
+  res.status(404).json({
+    message: "We couldn't find that page. Here are some links",
+    go_home: 'http://localhost:4001',
+    users: 'http://localhost:4001/users',
+    log_in: 'http://localhost:4001/auth/login',
+    sign_up: 'http://localhost:4001/auth/signup',
+  });
   next(error);
 });
 
 // Default error handler
 app.use((error, res, next) => {
-  res.status(error.status || 500);
-  res.json({
-    error: {
-      message: error.message
-    }
-  })
+  res
+    .status(error.status || 500)
+    .json({ error: error.message })
 });
 
 // Invoke server

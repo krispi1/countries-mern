@@ -15,7 +15,7 @@ function App() {
   const data = useContext(CountriesContext);
   const { countries } = data;
   console.log(countries[118]);
-
+  
   return (
     <Suspense fallback=<Loading/>>
       <div className="App">

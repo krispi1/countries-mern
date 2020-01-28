@@ -4,6 +4,9 @@
 
 #### Status == work-in-progress
 
+#### More on Countries MERN architecture
+For a snapshot of Countries MERN building blocks [view this file](https://github.com/krispi1/countries-mern/blob/master/Countries_MERN_Problem_Statement.js)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
