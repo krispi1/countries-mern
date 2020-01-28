@@ -1,12 +1,20 @@
 const jwt = require('jsonwebtoken');
 
+// Validate login credentials
+// Returns a boolean
 const isLoggedIn = (req, res, next) => {
   try {
-    // Access the token section of authorization headers
+    // Auth headers pattern --> Authorization: bearerToken token
+    // Grab token from the second part of Authorization headers
     const bearerToken = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(bearerToken, process.env.JWT_KEY);
-    req.userData = decoded;
-    next();
+    
+    // Decode the encoded bearerToken which is supplied along with 
+    // user request and assign the result to the userData
+    // property of the request (req) object
+    req.userData = jwt.verify(bearerToken, process.env.JWT_KEY);
+    
+    next(); // Call the next middleware in line
+
   } catch(err) {
     console.error(err);
     return res.status(401).json({
