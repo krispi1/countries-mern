@@ -12,6 +12,8 @@ const AuthControllers = {};
 
 // POST /auth/signup --> Create a user
 AuthControllers.createUser = (req, res, next) => {
+  console.log('\ncreateUser invoked...');
+  
   User
     .find({ email: req.body.email })
     .exec()
@@ -20,7 +22,10 @@ AuthControllers.createUser = (req, res, next) => {
         return res.status(409).json({
           message: `Email already taken! If it's yours, please
           login or reset your password if you forgot it.
-          Otherwise signup with a new email address.`
+          Otherwise signup with a new email address.`,
+          login_here: 'http://localhost:4001/auth/login',
+          all_notes: `http://localhost:4001/notes`,
+          all_users: `http://localhost:4001/users`
         })
       } else {
         bcrypt.hash(req.body.password, 10, (err, hash) => {
@@ -31,16 +36,16 @@ AuthControllers.createUser = (req, res, next) => {
               email: req.body.email,
               username: req.body.username,
               password: hash,
-              notes: []
             });
 
             user
               .save()
               .then(result => {
-                console.log(result);
                 return res.status(201).json({
                   message: 'User created & saved successfully.',
                   login_here: 'http://localhost:4001/auth/login',
+                  all_notes: `http://localhost:4001/notes`,
+                  all_users: `http://localhost:4001/users`
                 });
               })
               .catch(err => {
@@ -52,6 +57,108 @@ AuthControllers.createUser = (req, res, next) => {
       }
     }) // then
 } // createUser
+
+// POST /auth/login --> Log user in
+AuthControllers.loginUser = (req, res, next) => {
+  console.log('\nloginUser invoked...');
+  
+  User
+    .find({ email: req.body.email })
+    .exec()
+    .then(user => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          message: 'Login failed!',
+          try_again: 'http://localhost:4001/auth/login',
+          sign_up: 'http://localhost:4001/auth/signup',
+          go_home: 'http://localhost:4001'
+        });
+      }
+
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          return res.status(401).json({ 
+            message: 'Login failed!',
+            try_again: 'http://localhost:4001/auth/login',
+            go_home: 'http://localhost:4001',
+            all_notes: `http://localhost:4001/notes`,
+            all_users: `http://localhost:4001/users`
+          });
+        }
+        if (result) {
+          const token = jwt.sign(
+            {
+              email: user[0].email,
+              userId: user[0]._id
+            },
+            process.env.JWT_KEY,
+            {
+              expiresIn: "6h"
+            }
+          );
+          return res.status(200).json({
+            message: 'Login successful.',
+            bearerToken: token,
+            more_links: {
+              my_notes: `http://localhost:4001/notes/${user[0].username}`,
+              all_notes: `http://localhost:4001/notes`,
+              my_page: `http://localhost:4001/users/${user[0].username}`,
+              all_users: `http://localhost:4001/users`,
+              go_home: 'http://localhost:4001'
+            }
+          });
+        }
+        return res.status(401).json({
+          message: 'Login failed!',
+          try_again: 'http://localhost:4001/auth/login',
+          go_home: 'http://localhost:4001',
+          all_notes: `http://localhost:4001/notes`,
+          all_users: `http://localhost:4001/users`
+        });
+      })
+    })
+    .catch(err => {
+      console.log(err);
+      return res.status(500).json({ 
+        error: err,
+        message: 'Login failed!',
+        try_again: 'http://localhost:4001/auth/login',
+        sign_up: 'http://localhost:4001/auth/signup',
+        go_home: 'http://localhost:4001',
+        all_notes: `http://localhost:4001/notes`,
+        all_users: `http://localhost:4001/users`
+      });
+    })
+} // loginUser
+
+
+// POST /auth/logout --> Log user out
+AuthControllers.logoutUser = (req, res, next) => {} // logoutUser
+
+module.exports = AuthControllers;
+
+
+/*
+
+->POST    /auth/signup      ---done && tested
+->POST    /auth/login       ---done && tested
+->POST    /auth/logout      ---not done && not tested
+
+// AuthControllers routes & handler functions
+
+Method  Route          Function       Purpose
+
+POST    /auth/signup   createUser     Create a user 
+POST    /auth/login    loginUser      Log user in
+POST    /auth/logout   logoutUser     Log user out
+
+*/
+
+
+
+
+/* 
+// loginUser with console.log statements for troubleshooting
 
 // POST /auth/login --> Log user in
 AuthControllers.loginUser = (req, res, next) => {
@@ -90,7 +197,7 @@ AuthControllers.loginUser = (req, res, next) => {
             },
             process.env.JWT_KEY,
             {
-              expiresIn: "1h"
+              expiresIn: "6h"
             }
           );
           console.log('6. In bcrypt.compare (result) block: Token generated..');
@@ -124,25 +231,4 @@ AuthControllers.loginUser = (req, res, next) => {
       return;
     })
 } // loginUser
-
-// POST /auth/login --> Log user out
-AuthControllers.logoutUser = (req, res, next) => {} // logoutUser
-
-module.exports = AuthControllers;
-
-
-/*
-
-->POST    /auth/signup      ---done && tested
-->POST    /auth/login       ---done && tested
-->POST    /auth/logout      ---not done && not tested
-
-// AuthControllers routes & handler functions
-
-Method  Route          Function       Purpose
-
-POST    /auth/signup   createUser     Create a user 
-POST    /auth/login    loginUser      Log user in
-POST    /auth/logout   logoutUser     Log user out
-
 */
