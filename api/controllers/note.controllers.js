@@ -82,7 +82,7 @@ NoteControllers.fetchAllNotes = (req, res, next) => {
         notes: allNotes,
         all_users: `http://localhost:4001/users`
       });
-    })
+    }) // then
     .catch(err => {
       console.log(err);
       return res.status(500).json(err)

@@ -28,6 +28,7 @@ AuthControllers.createUser = (req, res, next) => {
           all_users: `http://localhost:4001/users`
         })
       } else {
+        // Hash password with 10 salting rounds
         bcrypt.hash(req.body.password, 10, (err, hash) => {
           if (err) {
             return res.status(500).json({ error: err });
@@ -52,9 +53,9 @@ AuthControllers.createUser = (req, res, next) => {
                 console.log(err);
                 return res.status(500).json({ error: err })
               })
-          }
+          } // else
         }) // bcrypt.hash
-      }
+      } // else
     }) // then
 } // createUser
 
@@ -68,17 +69,19 @@ AuthControllers.loginUser = (req, res, next) => {
     .then(user => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: 'Login failed!',
+          message: 'Login failed! Check your password or email.',
           try_again: 'http://localhost:4001/auth/login',
           sign_up: 'http://localhost:4001/auth/signup',
-          go_home: 'http://localhost:4001'
+          go_home: 'http://localhost:4001',
+          all_notes: `http://localhost:4001/notes`,
+          all_users: `http://localhost:4001/users`
         });
       }
 
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           return res.status(401).json({ 
-            message: 'Login failed!',
+            message: 'Login failed! Check your password or email.',
             try_again: 'http://localhost:4001/auth/login',
             go_home: 'http://localhost:4001',
             all_notes: `http://localhost:4001/notes`,
@@ -109,7 +112,7 @@ AuthControllers.loginUser = (req, res, next) => {
           });
         }
         return res.status(401).json({
-          message: 'Login failed!',
+          message: 'Login failed! Check your password or email.',
           try_again: 'http://localhost:4001/auth/login',
           go_home: 'http://localhost:4001',
           all_notes: `http://localhost:4001/notes`,
@@ -121,7 +124,7 @@ AuthControllers.loginUser = (req, res, next) => {
       console.log(err);
       return res.status(500).json({ 
         error: err,
-        message: 'Login failed!',
+        message: 'Login failed! Check your password or email.',
         try_again: 'http://localhost:4001/auth/login',
         sign_up: 'http://localhost:4001/auth/signup',
         go_home: 'http://localhost:4001',
@@ -170,7 +173,7 @@ AuthControllers.loginUser = (req, res, next) => {
       if (user.length < 1) {
       console.log('2. Inside then block: User not found..');
         res.status(401).json({
-          message: 'Login failed!',
+          message: 'Login failed! Check your password or email.',
           try_again: 'http://localhost:4001/auth/login',
           sign_up: 'http://localhost:4001/auth/signup',
           go_home: 'http://localhost:4001'
@@ -182,7 +185,7 @@ AuthControllers.loginUser = (req, res, next) => {
         if (err) {
           console.log('4. In bcrypt.compare (err) block: Password check error..');
           res.status(401).json({ 
-            message: 'Login failed!',
+            message: 'Login failed! Check your password or email.',
             try_again: 'http://localhost:4001/auth/login',
             go_home: 'http://localhost:4001'
           });
@@ -211,7 +214,7 @@ AuthControllers.loginUser = (req, res, next) => {
         console.log('8. In bcrypt.compare block: Default error block reached...');
         console.log('9. In bcrypt.compare (err) block: Password check failed..');
         res.status(401).json({
-          message: 'Login failed!',
+          message: 'Login failed! Check your password or email.',
           try_again: 'http://localhost:4001/auth/login',
           go_home: 'http://localhost:4001'
         });
@@ -223,7 +226,7 @@ AuthControllers.loginUser = (req, res, next) => {
       console.log(err);
       res.status(500).json({ 
         error: err,
-        message: 'Login failed!',
+        message: 'Login failed! Check your password or email.',
         try_again: 'http://localhost:4001/auth/login',
         sign_up: 'http://localhost:4001/auth/signup',
         go_home: 'http://localhost:4001'

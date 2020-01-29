@@ -13,7 +13,7 @@ UserControllers.fetchAllUsers = (req, res, next) => {
   
   User
     .find()
-    .select('_id username notes')
+    .select('_id username')
     .exec()
     .then(users => {
       const response = {
@@ -32,7 +32,7 @@ UserControllers.fetchAllUsers = (req, res, next) => {
         ...response, 
         all_notes: `http://localhost:4001/notes`,
       });
-    })
+    }) // then
     .catch(err => {
       console.log(err);
       return res.status(500).json({ error: err });
@@ -68,7 +68,7 @@ UserControllers.fetchSingleUser = (req, res, next) => {
           }
         })
       )
-    })
+    }) // then
     .catch(err => {
       console.log(err);
       return res.status(500).json({ error: err });
@@ -102,7 +102,7 @@ UserControllers.editUser = (req, res, next) => {
           });
         })
         .catch(err => res.status(400).json({ error: err }))
-    })
+    }) // then
     .catch(err => {
       console.log(err);
       return res.status(500).json({ error: err });

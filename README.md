@@ -2,7 +2,7 @@
 
 [![Netlify Status](https://api.netlify.com/api/v1/badges/7a816f7c-ef98-4ba3-be44-d8b006031b8c/deploy-status)](https://countriesmern.netlify.com/)
 
-#### Status == work-in-progress
+##### Status == work-in-progress
 
 #### More on Countries MERN architecture
 For a snapshot of Countries MERN building blocks [view this file](https://github.com/krispi1/countries-mern/blob/master/Countries_MERN_Problem_Statement.js)
@@ -82,4 +82,5 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 3. [Mongoose queries](https://mongoosejs.com/docs/api.html#model_Model.findById)
 4. [useCallback vs useMemo](https://blog.hackages.io/react-hooks-usecallback-and-usememo-8d5bb2b67231)
 5. [When to use either useMemo or useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
+6. [Password salting](https://privacycanada.net/hash-functions/password-salting/)
 
