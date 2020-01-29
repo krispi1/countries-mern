@@ -23,9 +23,10 @@ module.exports = router;
 
 /*
 
-->GET    /users               --> Fetch all users
-->GET    /users/:userId       --> Fetch a single user
-->PATCH  /users/:userId/edit  --> Edit user
-->DELETE /users/:userId/del   --> Delete user
+// UserControllers routes
+GET      /users                  --> Fetch all users
+GET      /users/:username        --> Fetch a single user
+PATCH    /users/:username/edit   --> Edit user
+DELETE   /users/:username/del    --> Delete user
 
 */

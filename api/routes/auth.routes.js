@@ -20,9 +20,8 @@ module.exports = router;
 /*
 
 // AuthControllers routes
-->POST   /auth/signup      --> Create a user
-->POST   /auth/login       --> Log user in
-->POST   /auth/logout      --> Log user out
-
+POST   /auth/signup   --> Create a user
+POST   /auth/login    --> Log user in
+POST   /auth/logout   --> Log user out
 
 */

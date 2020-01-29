@@ -29,11 +29,10 @@ module.exports = router;
 /*
 
 // NoteControllers routes
->>POST     /notes/:username                --> Create a note for a user
->>GET      /notes/:username                --> Retrieve a user's notes
->>GET      /notes/:username/:noteId        --> Retrieve a single note for a user
->>PATCH    /notes/:username/:noteId/edit   --> Edit a note
->>DELETE   /notes/:username/:noteId/del    --> Delete a note
-
+POST     /notes/:username                --> Create a note for a user
+GET      /notes/:username                --> Retrieve a user's notes
+GET      /notes/:username/:noteId        --> Retrieve a single note for a user
+PATCH    /notes/:username/:noteId/edit   --> Edit a note
+DELETE   /notes/:username/:noteId/del    --> Delete a note
 
 */

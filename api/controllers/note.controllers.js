@@ -28,7 +28,7 @@ NoteControllers.createNote = (req, res, next) => {
 
       note
         .save()
-        .then(note => res.status(200).json({
+        .then(note => res.status(201).json({
           message: 'Note created & saved successfully.',
           note
         }))
@@ -214,7 +214,7 @@ NoteControllers.fetchSingleNote = (req, res, next) => {
     })
 } // fetchSingleNote
 
-// PATCH /notes/:username/:noteId/edit --> Edit a note
+// PATCH /notes/:username/:noteId/edit --> Edit a note --> Login required
 NoteControllers.editNote = (req, res, next) => {
   console.log(`\neditNote invoked...`);
 
@@ -257,7 +257,7 @@ NoteControllers.editNote = (req, res, next) => {
     })
 } // editNote
 
-// DELETE /notes/:username/:noteId/del --> Delete a note
+// DELETE /notes/:username/:noteId/del --> Delete a note --> Login required
 NoteControllers.deleteNote = (req, res, next) => {
   console.log(`\neditNote invoked...`);
   

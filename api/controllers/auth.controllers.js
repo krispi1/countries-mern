@@ -135,7 +135,7 @@ AuthControllers.loginUser = (req, res, next) => {
 } // loginUser
 
 
-// POST /auth/logout --> Log user out
+// POST /auth/logout --> Log user out --> Login required
 AuthControllers.logoutUser = (req, res, next) => {} // logoutUser
 
 module.exports = AuthControllers;

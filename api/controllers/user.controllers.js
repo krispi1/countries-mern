@@ -75,7 +75,7 @@ UserControllers.fetchSingleUser = (req, res, next) => {
     })
 } // fetchSingleUser
 
-// PATCH /users/:username/edit --> Edit user
+// PATCH /users/:username/edit --> Edit user --> Login required
 UserControllers.editUser = (req, res, next) => {
   console.log('\neditUser invoked...');
 
@@ -109,7 +109,7 @@ UserControllers.editUser = (req, res, next) => {
     })
 } // editUser
 
-// DELETE /users/:username/del --> Delete user
+// DELETE /users/:username/del --> Delete user --> Login required
 UserControllers.deleteUser = (req, res, next) => {
   console.log('\ndeleteUser invoked...');
 
