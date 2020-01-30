@@ -77,10 +77,11 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
 ### References:
-1. [Fetching data with useEffect](https://www.robinwieruch.de/react-hooks-fetch-data)
-2. [How to memoize components in React](https://medium.com/@rossbulat/how-to-memoize-in-react-3d20cbcd2b6e)
-3. [Mongoose queries](https://mongoosejs.com/docs/api.html#model_Model.findById)
-4. [useCallback vs useMemo](https://blog.hackages.io/react-hooks-usecallback-and-usememo-8d5bb2b67231)
-5. [When to use either useMemo or useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
-6. [Password salting](https://privacycanada.net/hash-functions/password-salting/)
-
+001. [Fetching data with useEffect](https://www.robinwieruch.de/react-hooks-fetch-data)
+002. [How to memoize components in React](https://medium.com/@rossbulat/how-to-memoize-in-react-3d20cbcd2b6e)
+003. [Mongoose queries](https://mongoosejs.com/docs/api.html#model_Model.findById)
+004. [useCallback vs useMemo](https://blog.hackages.io/react-hooks-usecallback-and-usememo-8d5bb2b67231)
+005. [When to use either useMemo or useCallback](https://kentcdodds.com/blog/usememo-and-usecallback)
+006. [Password salting](https://privacycanada.net/hash-functions/password-salting/)
+007. [Fade in effects](https://codepad.co/snippet/smooth-css-fade-in-on-page-load-animation)
+008. [HTTP Status Codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)

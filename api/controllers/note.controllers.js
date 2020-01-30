@@ -8,7 +8,7 @@ const Note = require('../models/note.model'); // Note model
 // This enables "dependency injection" wherever needed.
 const NoteControllers = {};
 
-// POST /notes/:username --> Create a note
+// POST /notes/:username --> Create a note --> Login required
 NoteControllers.createNote = (req, res, next) => {
   console.log('\ncreateNote invoked...');
   

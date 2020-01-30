@@ -96,7 +96,7 @@ AuthControllers.loginUser = (req, res, next) => {
             },
             process.env.JWT_KEY,
             {
-              expiresIn: "6h"
+              expiresIn: "1h"
             }
           );
           return res.status(200).json({
