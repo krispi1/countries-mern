@@ -1,3 +1,4 @@
+/************************Global************************/
 * {
   margin: 0;
   padding: 0;
@@ -18,15 +19,9 @@ code {
     monospace;
 }
 
-.countries {
-  /* display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin: 10px 20px; */
 
+/************************Countries.js************************/
+.countries {
   display: grid;
   grid-gap: 10px;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -36,16 +31,99 @@ code {
   word-wrap: break-word;
   margin: 15px 10px;
   padding: 10px;
+  height: 430px;
   border-radius: 10px;
   box-shadow: 1px 2px 13px 0px rgba(0,0,0,0.75);
   -webkit-box-shadow: 1px 2px 13px 0px rgba(0,0,0,0.75);
   -moz-box-shadow: 1px 2px 13px 0px rgba(0,0,0,0.75);
 }
 
+/*=== Trigger  ===*/
+.animate {
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s;
+  -webkit-animation-fill-mode: both;
+  animation-fill-mode: both;
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeIn;
+	animation-name: fadeIn;
+}
+
+.country {
+  -webkit-animation-delay: 1.5s;
+  -moz-animation-delay: 1.5s;
+  animation-delay: 1.5s;
+}
+
+/*==== FADE IN UP ===*/
+@-webkit-keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    -webkit-transform: translate3d(0, 100%, 0);
+    transform: translate3d(0, 100%, 0);
+  }
+
+  to {
+    opacity: 1;
+    -webkit-transform: none;
+    transform: none;
+  }
+}
+
+.fadeInUp {
+  -webkit-animation-name: fadeInUp;
+  animation-name: fadeInUp;
+}
+
 .country-div:hover {
   padding: 7px;
-  box-shadow: 1px 2px 13px 0px rgb(29, 248, 182);
-  -webkit-box-shadow: 1px 2px 13px 0px rgb(29, 248, 182);
-  -moz-box-shadow: 1px 2px 13px 0px rgb(29, 248, 182);
+  box-shadow: 1px 2px 13px 0px rgb(229, 127, 255);
+  -webkit-box-shadow: 1px 2px 13px 0px rgb(229, 127, 255);
+  -moz-box-shadow: 1px 2px 13px 0px rgb(229, 127, 255);
 }
+
+
+/*********************CountriesList.js*********************/
+#countriesDLInput {
+  margin-top: 6px;
+  margin-bottom: -10px;
+  padding: 5px;
+  height: 30px;
+  width: 200px;
+  font-size: 1.1em;
+  font-weight: 400;
+  background-color: rgb(212, 212, 212);
+  text-align: center;
+}
+
+
+/************************Navbar.js************************/
+.navbar-links {
+  background-color: rgb(212, 212, 212);
+  padding-top: 3px;
+  font-weight: 600;
+  font-size: 1.1em;
+  height: 30px;
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+}
+
+
 

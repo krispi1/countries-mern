@@ -5,7 +5,7 @@
 
 >>Stack --> MERN (MongoDB, Express, React, Node.js)
 
->>Backend: 
+>>Backend (api):
 
 Package           Purpose
 -----------------------------------------------------------------------
@@ -26,6 +26,7 @@ Package           Purpose
 -----------------------------------------------------------------------
 React             Frontend library
 ReactDOM          Manage DOM internally and render elements in React
+React-router-dom  Handle all routing related actions in React
 Axios             Handle frontend<-->backend communication
 
 
@@ -234,3 +235,19 @@ https://restcountries.eu/rest/v2/alpha/col
 ---------------------------------------------------------------------------
 
 */
+
+
+/**Reminders to self
+
+// src/components/CountriesList.js
+// Get it to navigate to country upon click on or pressing 
+// enter datalist option.
+
+// src/components/SignIn.js
+// Implement input validation.
+
+// src/components/SignUp.js
+// Implement input validation.
+
+
+ */

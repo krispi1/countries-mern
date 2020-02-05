@@ -1,5 +1,5 @@
 import React from 'react';
-import spinner from '../assets/spinner-transparent-bg.gif';
+import spinner from '../utils/spinner-transparent-bg.gif';
 
 const loadingStyle = {
   display: 'flex',

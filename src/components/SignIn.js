@@ -1,10 +1,15 @@
-import React from 'react';
+// Modules
+import React, { useState } from 'react';
+import { withRouter } from 'react-router-dom';
+
+// Service
+import AuthService from '../services/auth.service';
+
+// Material UI stuff
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import TextField from '@material-ui/core/TextField';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import Checkbox from '@material-ui/core/Checkbox';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -28,7 +33,7 @@ function Copyright() {
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    marginTop: theme.spacing(8),
+    marginTop: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -46,8 +51,75 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-export default function SignIn() {
+
+function SignIn(props) {
+  console.log('SignIn rendering...');
+  
   const classes = useStyles();
+
+  /* 
+  // Imagine an application with 20 or more input fields.
+
+  // This is the non-scalable way of handling state and 
+  // is left here for reference and comparison.
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  */
+
+  // What follows is the scalable way of handling state.
+  const initialState = {
+    email: '',
+    password: ''
+  };
+
+  const [state, setState] = useState({ ...initialState });
+
+
+  /* 
+  // This section demonstrates the non-scalable way of handling 
+  // user input and is left here for reference and comparison.
+  
+  const onSubmitHandler = event => {
+    event.preventDefault();
+    const formValue = { email, password };
+    
+    // Post login data to the server to log user in
+    AuthService.login(formValue);
+    setEmail('');
+    setPassword('');
+  } // onSubmitHandler
+
+  const onEmailChange = event => {
+    setEmail(event.target.value);
+  } // onEmailChange
+
+  const onPasswordChange = event => {
+    setPassword(event.target.value);
+  } // onPasswordChange
+  */
+
+
+  // For the sake of scalability, it's better to create a 
+  // single dynamic input handler that caters to each input 
+  // field uniquely.
+  const inputHandler = event => {
+    // The ...spread operator below ensures that state is
+    // not overwritten, but is being swapped out for a new 
+    // one whenever changes in state occur.
+    setState({
+      ...state,
+      [event.target.name]: event.target.value
+    });
+  } // inputHandler
+
+  const submitInput = event => {
+    event.preventDefault(); // Prevent form submission
+    console.log(state);
+
+    // Post login data to the server to log user in
+    AuthService.login(state);
+
+  } // submitInput
 
   return (
     <Container component="main" maxWidth="xs">
@@ -59,18 +131,32 @@ export default function SignIn() {
         <Typography component="h1" variant="h5">
           Sign In
         </Typography>
- 
-        <form className={classes.form} noValidate>
+
+        {/* 
+        Make form input handling dynamic and scalable.
+
+        Below, the non-scalable way of handling input for 
+        each field separately is given up.
+
+        A dynamic inputHandler is adopted instead.
+        */}
+        <form method="POST" className={classes.form}>
           <TextField
+            autoFocus
             variant="outlined"
             margin="normal"
             required
             fullWidth
+            type="email"
             id="email"
             label="Email Address"
             name="email"
             autoComplete="email"
-            autoFocus
+            placeholder="johndoe@email.com"
+            // value={email}
+            value={state.email}
+            // onChange={ onEmailChange }
+            onChange={ inputHandler }
           />
  
           <TextField
@@ -78,27 +164,27 @@ export default function SignIn() {
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Password"
             type="password"
             id="password"
+            label="Password"
+            name="password"
+            placeholder="StrongPassword"
             autoComplete="current-password"
-          />
- 
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            // value={password}
+            value={state.password}
+            // onChange={ onPasswordChange }
+            onChange={ inputHandler }
           />
  
           <Button
-            type="submit"
-            fullWidth
-            variant="contained"
             color="primary"
+            variant="contained"
+            fullWidth
+            type="submit"
             className={classes.submit}
-          >
-            Sign In
-          </Button>
+            // onClick={ onSubmitHandler }
+            onClick={ submitInput }
+          >Sign In</Button>
  
           <Grid container>
             <Grid item xs>
@@ -108,7 +194,7 @@ export default function SignIn() {
             </Grid>
  
             <Grid item>
-              <Link to="/signup" variant="body2">
+              <Link  href="/signup" variant="body2">
                 {"Don't have an account? Sign up"}
               </Link>
             </Grid>
@@ -122,3 +208,5 @@ export default function SignIn() {
     </Container>
   );
 }
+
+export default withRouter(SignIn);

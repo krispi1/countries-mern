@@ -1,9 +1,9 @@
 /*
 
 ////////////////////////////////////////////////////////////
-BACKEND (/api)
-I used Postman
-I set /api/server.js to app.use(morgan('tiny'))
+BACKEND (/api) -- Express
+I used Postman for making requests
+I set /api/server.js to app.use(morgan('tiny')) for logging
 
 ////////////////////////////////////////////////////////////
 Problem: api1
@@ -155,11 +155,75 @@ Scenario 3 -- Fixed.
 7. In bcrypt.compare (result) block: Login successful..
 POST /auth/login 200 261 - 2215.476 ms
 
+
 ////////////////////////////////////////////////////////////
-Problem api4
+FRONTEND -- React
+
+////////////////////////////////////////////////////////////
+Problem f/end1
+
+Error: Element type is invalid: expected a string (for built-in components) 
+or a class/function (for composite components) but got: object.
+
+Check the render method of `Context.Consumer`.
 
 
+////////////////////////////////////////////////////////////
+Problem f/end2
 
+Warning: React does not recognize the `computedMatch` prop on a DOM element. 
+If you intentionally want it to appear in the DOM as a custom attribute, 
+spell it as lowercase `computedmatch` instead. If you accidentally passed 
+it from a parent component, remove it from the DOM element.
+    in div (at App.js:27)
+    in Switch (at App.js:26)
+    in Suspense (at App.js:25)
+    in Router (created by BrowserRouter)
+    in BrowserRouter (at App.js:24)
+    in App (at src/index.js:11)
+    in SetContext (at src/index.js:10)
+
+
+////////////////////////////////////////////////////////////
+Problem f/end3
+
+When: On creating a failsafe for a wrong country name
+Path: http://localhost:3000/countries/wrongcountry
+File: src/components/Country.js
+
+Error:
+
+Country.js:32 Uncaught TypeError: Cannot convert undefined or null to object
+    at Function.entries (<anonymous>)
+    at Country (Country.js:32)
+    at renderWithHooks (react-dom.development.js:16260)
+    at updateFunctionComponent (react-dom.development.js:18347)
+    at mountLazyComponent (react-dom.development.js:18657)
+    at beginWork$1 (react-dom.development.js:20168)
+    at HTMLUnknownElement.callCallback (react-dom.development.js:
+
+Findings:
+In my steps towards finding a solution, I realized that when
+troubleshooting, it's really important to pay attention to
+the error code. Uncaught TypeError in this case.
+
+Testing for if (country === null || country === undefined) {}
+couldn't catch the bug. Code execution still flowed through
+the if statement's body and into the next block.
+
+Solution:
+
+This one was really frustrating. After carefully inspecting
+the country object with these two lines:
+// console.log(typeof country);
+// console.log(Array.isArray(country));
+
+-- I found that country was an array.
+
+For that to work I had to access its first element country[0].
+
+////////////////////////////////////////////////////////////
+Problem f/end4
 
 
 */

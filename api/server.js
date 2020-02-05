@@ -32,7 +32,7 @@ const dbOPTIONS = {
 function connectToDB(dbURI) {
   return mongoose.connect(dbURI, dbOPTIONS)
     .then(() => {
-      console.log("Connected to DB..\n");
+      console.log("✔ Connected to DB..\n");
       return mongoose.connection;
     })
     .catch(err => console.error(
@@ -68,7 +68,7 @@ app.use((req, res, next) => {
   next(error);
 });
 
-// Default error handler
+// Default error handler (must be placed after all others)
 app.use((error, res, next) => {
   res
     .status(error.status || 500)
@@ -78,5 +78,5 @@ app.use((error, res, next) => {
 // Invoke server
 app.listen(PORT, () => {
   connectToDB(dbURI);
-  console.log(`\nServer running on port ${PORT}`)
+  console.log(`\n✔ Server running on port ${PORT}`)
 });
