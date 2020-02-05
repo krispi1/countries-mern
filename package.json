@@ -1,6 +1,9 @@
 {
   "name": "countries-mern-api",
   "version": "1.0.0",
+  "engines": {
+    "node": "12.13.1"
+  },
   "description": "Server countries-MERN requests",
   "main": "server.js",
   "scripts": {
