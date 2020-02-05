@@ -1,7 +1,7 @@
 import axios from 'axios';
 import jwt_decode from 'jwt-decode';
 
-// AuthService is an object to hold all authentication services
+// AuthService shall hold all authentication services.
 const AuthService = {};
 
 /**
@@ -14,10 +14,9 @@ const AuthService = {};
  *
  */
 AuthService.signup = newUser => {
-  
   return axios
     .post(
-      'auth/signup',
+      '/api/auth/signup',
       {
         username: newUser.username,
         email: newUser.email,
@@ -50,7 +49,7 @@ AuthService.login = user => {
   return axios
     // Send user data (POST) to the server at /auth/login endpoint
     .post(
-      '/auth/login',
+      '/api/auth/login',
       {
         email: user.email,
         password: user.password

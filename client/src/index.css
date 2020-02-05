@@ -114,7 +114,7 @@ code {
 
 /************************Navbar.js************************/
 .navbar-links {
-  background-color: rgb(212, 212, 212);
+  background-color: rgb(99, 99, 99);
   padding-top: 3px;
   font-weight: 600;
   font-size: 1.1em;
@@ -125,5 +125,14 @@ code {
   justify-content: space-evenly;
 }
 
+.links-in-navbar {
+  text-decoration: none;
+  color: rgb(255, 0, 242);
+}
 
+.links-in-navbar:hover {
+  color: rgb(0, 217, 255);
+}
+
+/************************    ************************/
 

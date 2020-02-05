@@ -1,2 +1,0 @@
-/* Personal Profile -- Requires login */
-
