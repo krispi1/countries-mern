@@ -21,7 +21,7 @@ const PORT          = process.env.PORT || 4001;
 
 // Set up db options
 mongoose.Promise = global.Promise;
-const dbURI = process.env.DB_URI;
+const dbURI = process.env.ATLAS;
 const dbOPTIONS = {
   useNewUrlParser: true,
   useCreateIndex: true,
