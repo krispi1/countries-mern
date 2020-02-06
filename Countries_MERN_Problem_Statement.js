@@ -60,23 +60,23 @@ Axios             Handle frontend<-->backend communication
 Segment   Method   URI                              Login required?
 -----------------------------------------------------------------------
 Auth
-          POST     /auth/signup                     false
-          POST     /auth/login                      false
-          POST     /auth/logout                     true
+          POST     /api/auth/signup                     false
+          POST     /api/auth/login                      false
+          POST     /api/auth/logout                     true
 -----------------------------------------------------------------------
 Users      
-          GET      /users                           false
-          GET      /users/username                  false
-          PATCH    /users/username/edit             true
-          DELETE   /users/username/del              true
+          GET      /api/users                           false
+          GET      /api/users/username                  false
+          PATCH    /api/users/username/edit             true
+          DELETE   /api/users/username/del              true
 -----------------------------------------------------------------------
 Notes     
-          POST     /notes/:username                 true
-          GET      /notes                           false
-          GET      /notes/:username                 false
-          GET      /notes/:username/:noteId         false
-          PATCH    /notes/:username/:noteId/edit    true
-          DELETE   /notes/:username/:noteId/del     true
+          POST     /api/notes/:username                 true
+          GET      /api/notes                           false
+          GET      /api/notes/:username                 false
+          GET      /api/notes/:username/:noteId         false
+          PATCH    /api/notes/:username/:noteId/edit    true
+          DELETE   /api/notes/:username/:noteId/del     true
 ---------------------------------------------------------------------------
 
 ---------------------------------------------------------------------------

@@ -7,7 +7,7 @@ const User = require('../models/user.model'); // User model
 // This enables "dependency injection" wherever needed.
 const UserControllers = {};
 
-// GET /users --> Fetch all users
+// GET /api/users --> Fetch all users
 UserControllers.fetchAllUsers = (req, res, next) => {
   console.log('\nfetchAllUsers invoked...');
   
@@ -23,7 +23,7 @@ UserControllers.fetchAllUsers = (req, res, next) => {
             _id: user._id,
             username: user.username,
             notes: user.notes,
-            view_user: `http://localhost:4001/users/${user.username}`,
+            view_user: `http://localhost:4001/api/users/${user.username}`,
             user_notes: `http://localhost:4001/notes/${user.username}`
           }
         })
@@ -39,7 +39,7 @@ UserControllers.fetchAllUsers = (req, res, next) => {
     })
 } // fetchAllUsers
 
-// GET /users/:username --> Fetch a single user
+// GET /api/users/:username --> Fetch a single user
 UserControllers.fetchSingleUser = (req, res, next) => {
   console.log('\nfetchSingleUser invoked...');
 
@@ -53,7 +53,7 @@ UserControllers.fetchSingleUser = (req, res, next) => {
         res.status(500).json({
           message: 'Invalid user!!',
           go_home: 'http://localhost:4001',
-          all_users: 'http://localhost:4001/users',
+          all_users: 'http://localhost:4001/api/users',
           all_notes: 'http://localhost:4001/notes'
         })
       ) : (
@@ -64,7 +64,7 @@ UserControllers.fetchSingleUser = (req, res, next) => {
           more_links: {
             user_notes: `http://localhost:4001/notes/${user[0].username}`,
             all_notes: `http://localhost:4001/notes`,
-            all_users: `http://localhost:4001/users`
+            all_users: `http://localhost:4001/api/users`
           }
         })
       )
@@ -75,7 +75,7 @@ UserControllers.fetchSingleUser = (req, res, next) => {
     })
 } // fetchSingleUser
 
-// PATCH /users/:username/edit --> Edit user --> Login required
+// PATCH /api/users/:username/edit --> Edit user --> Login required
 UserControllers.editUser = (req, res, next) => {
   console.log('\neditUser invoked...');
 
@@ -109,7 +109,7 @@ UserControllers.editUser = (req, res, next) => {
     })
 } // editUser
 
-// DELETE /users/:username/del --> Delete user --> Login required
+// DELETE /api/users/:username/del --> Delete user --> Login required
 UserControllers.deleteUser = (req, res, next) => {
   console.log('\ndeleteUser invoked...');
 
@@ -120,7 +120,7 @@ UserControllers.deleteUser = (req, res, next) => {
       return res.status(200).json({
         message: 'User deleted!!',
         go_home: 'http://localhost:4001',
-        all_users: 'http://localhost:4001/users',
+        all_users: 'http://localhost:4001/api/users',
         all_notes: 'http://localhost:4001/notes'
       })
     })
@@ -129,7 +129,7 @@ UserControllers.deleteUser = (req, res, next) => {
       return res.status(500).json({
         error: err,
         go_home: 'http://localhost:4001', 
-        all_users: 'http://localhost:4001/users',
+        all_users: 'http://localhost:4001/api/users',
         all_notes: 'http://localhost:4001/notes'
       })
     })
@@ -140,19 +140,19 @@ module.exports = UserControllers;
 
 /* 
 
-->GET     /users                 ---done && tested
-->GET     /users/:username       ---done && tested
-->PATCH   /users/:username/edit  ---done && tested
-->DELETE  /users/:username/del   ---done && tested
+->GET     /api/users                 ---done && tested
+->GET     /api/users/:username       ---done && tested
+->PATCH   /api/users/:username/edit  ---done && tested
+->DELETE  /api/users/:username/del   ---done && tested
 
 // UserController routes & handler functions 
 
 Method   Route                   Function           Purpose
 
-GET      /users                  fetchAllUsers      Fetch all users 
-GET      /users/:username        fetchSingleUser    Fetch a single user
-PATCH    /users/:username/edit   editUser           Edit user
-DELETE   /users/:username/del    deleteUser         Delete user
+GET      /api/users                  fetchAllUsers      Fetch all users 
+GET      /api/users/:username        fetchSingleUser    Fetch a single user
+PATCH    /api/users/:username/edit   editUser           Edit user
+DELETE   /api/users/:username/del    deleteUser         Delete user
 
 
 // console.log(UserControllers)

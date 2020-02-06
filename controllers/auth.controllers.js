@@ -10,7 +10,7 @@ const User = require('../models/user.model'); // User model
 // This enables "dependency injection" wherever needed.
 const AuthControllers = {};
 
-// POST /auth/signup --> Create a user
+// POST /api/auth/signup --> Create a user
 AuthControllers.createUser = (req, res, next) => {
   console.log('\ncreateUser invoked...');
   
@@ -22,10 +22,7 @@ AuthControllers.createUser = (req, res, next) => {
         return res.status(409).json({
           message: `Email already taken! If it's yours, please
           login or reset your password if you forgot it.
-          Otherwise signup with a new email address.`,
-          login_here: 'http://localhost:4001/auth/login',
-          all_notes: `http://localhost:4001/notes`,
-          all_users: `http://localhost:4001/users`
+          Otherwise signup with a new email address.`
         })
       } else {
         // Hash password with 10 salting rounds
@@ -43,10 +40,7 @@ AuthControllers.createUser = (req, res, next) => {
               .save()
               .then(result => {
                 return res.status(201).json({
-                  message: 'User created & saved successfully.',
-                  login_here: 'http://localhost:4001/auth/login',
-                  all_notes: `http://localhost:4001/notes`,
-                  all_users: `http://localhost:4001/users`
+                  message: 'User created & saved successfully.'
                 });
               })
               .catch(err => {
@@ -59,7 +53,7 @@ AuthControllers.createUser = (req, res, next) => {
     }) // then
 } // createUser
 
-// POST /auth/login --> Log user in
+// POST /api/auth/login --> Log user in
 AuthControllers.loginUser = (req, res, next) => {
   console.log('\nloginUser invoked...');
   
@@ -69,23 +63,14 @@ AuthControllers.loginUser = (req, res, next) => {
     .then(user => {
       if (user.length < 1) {
         return res.status(401).json({
-          message: 'Login failed! Check your password or email.',
-          try_again: 'http://localhost:4001/auth/login',
-          sign_up: 'http://localhost:4001/auth/signup',
-          go_home: 'http://localhost:4001',
-          all_notes: `http://localhost:4001/notes`,
-          all_users: `http://localhost:4001/users`
+          message: 'Login failed! Check your password or email.'
         });
       }
 
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
         if (err) {
           return res.status(401).json({ 
-            message: 'Login failed! Check your password or email.',
-            try_again: 'http://localhost:4001/auth/login',
-            go_home: 'http://localhost:4001',
-            all_notes: `http://localhost:4001/notes`,
-            all_users: `http://localhost:4001/users`
+            message: 'Login failed! Check your password or email.'
           });
         }
         if (result) {
@@ -102,22 +87,11 @@ AuthControllers.loginUser = (req, res, next) => {
           );
           return res.status(200).json({
             message: 'Login successful.',
-            bearerToken: token,
-            more_links: {
-              my_notes: `http://localhost:4001/notes/${user[0].username}`,
-              all_notes: `http://localhost:4001/notes`,
-              my_page: `http://localhost:4001/users/${user[0].username}`,
-              all_users: `http://localhost:4001/users`,
-              go_home: 'http://localhost:4001'
-            }
+            bearerToken: token
           });
         }
         return res.status(401).json({
-          message: 'Login failed! Check your password or email.',
-          try_again: 'http://localhost:4001/auth/login',
-          go_home: 'http://localhost:4001',
-          all_notes: `http://localhost:4001/notes`,
-          all_users: `http://localhost:4001/users`
+          message: 'Login failed! Check your password or email.'
         });
       })
     })
@@ -125,18 +99,13 @@ AuthControllers.loginUser = (req, res, next) => {
       console.log(err);
       return res.status(500).json({ 
         error: err,
-        message: 'Login failed! Check your password or email.',
-        try_again: 'http://localhost:4001/auth/login',
-        sign_up: 'http://localhost:4001/auth/signup',
-        go_home: 'http://localhost:4001',
-        all_notes: `http://localhost:4001/notes`,
-        all_users: `http://localhost:4001/users`
+        message: 'Login failed! Check your password or email.'
       });
     })
 } // loginUser
 
 
-// POST /auth/logout --> Log user out --> Login required
+// POST /api/auth/logout --> Log user out --> Login required
 AuthControllers.logoutUser = (req, res, next) => {} // logoutUser
 
 module.exports = AuthControllers;
@@ -144,17 +113,17 @@ module.exports = AuthControllers;
 
 /*
 
-->POST    /auth/signup      ---done && tested
-->POST    /auth/login       ---done && tested
-->POST    /auth/logout      ---not done && not tested
+->POST    /api/auth/signup      ---done && tested
+->POST    /api/auth/login       ---done && tested
+->POST    /api/auth/logout      ---not done && not tested
 
 // AuthControllers routes & handler functions
 
 Method  Route          Function       Purpose
 
-POST    /auth/signup   createUser     Create a user 
-POST    /auth/login    loginUser      Log user in
-POST    /auth/logout   logoutUser     Log user out
+POST    /api/auth/signup   createUser     Create a user 
+POST    /api/auth/login    loginUser      Log user in
+POST    /api/auth/logout   logoutUser     Log user out
 
 */
 
@@ -164,7 +133,7 @@ POST    /auth/logout   logoutUser     Log user out
 /* 
 // loginUser with console.log statements for troubleshooting
 
-// POST /auth/login --> Log user in
+// POST /api/auth/login --> Log user in
 AuthControllers.loginUser = (req, res, next) => {
   console.log('--------logs--------\n1. Request to /login initiated..');
   User
@@ -175,8 +144,8 @@ AuthControllers.loginUser = (req, res, next) => {
       console.log('2. Inside then block: User not found..');
         res.status(401).json({
           message: 'Login failed! Check your password or email.',
-          try_again: 'http://localhost:4001/auth/login',
-          sign_up: 'http://localhost:4001/auth/signup',
+          try_again: 'http://localhost:4001/api/auth/login',
+          sign_up: 'http://localhost:4001/api/auth/signup',
           go_home: 'http://localhost:4001'
         });
         return;
@@ -187,7 +156,7 @@ AuthControllers.loginUser = (req, res, next) => {
           console.log('4. In bcrypt.compare (err) block: Password check error..');
           res.status(401).json({ 
             message: 'Login failed! Check your password or email.',
-            try_again: 'http://localhost:4001/auth/login',
+            try_again: 'http://localhost:4001/api/auth/login',
             go_home: 'http://localhost:4001'
           });
           return;
@@ -216,20 +185,20 @@ AuthControllers.loginUser = (req, res, next) => {
         console.log('9. In bcrypt.compare (err) block: Password check failed..');
         res.status(401).json({
           message: 'Login failed! Check your password or email.',
-          try_again: 'http://localhost:4001/auth/login',
+          try_again: 'http://localhost:4001/api/auth/login',
           go_home: 'http://localhost:4001'
         });
         return;
       })
     })
     .catch(err => {
-      console.log('10. Default /auth error block reached...');
+      console.log('10. Default /api/auth error block reached...');
       console.log(err);
       res.status(500).json({ 
         error: err,
         message: 'Login failed! Check your password or email.',
-        try_again: 'http://localhost:4001/auth/login',
-        sign_up: 'http://localhost:4001/auth/signup',
+        try_again: 'http://localhost:4001/api/auth/login',
+        sign_up: 'http://localhost:4001/api/auth/signup',
         go_home: 'http://localhost:4001'
       });
       return;

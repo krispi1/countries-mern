@@ -8,7 +8,7 @@ const Note = require('../models/note.model'); // Note model
 // This enables "dependency injection" wherever needed.
 const NoteControllers = {};
 
-// POST /notes/:username --> Create a note --> Login required
+// POST /api/notes/:username --> Create a note --> Login required
 NoteControllers.createNote = (req, res, next) => {
   console.log('\ncreateNote invoked...');
   
@@ -45,7 +45,7 @@ NoteControllers.createNote = (req, res, next) => {
     })
 } // createNote
 
-// GET /notes --> Retrieve all notes for all users
+// GET /api/notes --> Retrieve all notes for all users
 NoteControllers.fetchAllNotes = (req, res, next) => {
   console.log(`\nfetchAllNotes invoked...`);
   
@@ -67,12 +67,12 @@ NoteControllers.fetchAllNotes = (req, res, next) => {
           stateOrCity: note.stateOrCity,
           town: note.town,
           content: note.content,
-          view_note: `http://localhost:4001/notes/${note.username}/${note._id}`,
+          view_note: `http://localhost:4001/api/notes/${note.username}/${note._id}`,
           user: {
             userId: note.userId,
             username: note.username,
-            user_notes: `http://localhost:4001/notes/${note.username}`,
-            view_user: `http://localhost:4001/users/${note.username}`,
+            user_notes: `http://localhost:4001/api/notes/${note.username}`,
+            view_user: `http://localhost:4001/api/users/${note.username}`,
           }
         })
       }); // notes.map
@@ -80,7 +80,7 @@ NoteControllers.fetchAllNotes = (req, res, next) => {
       return res.status(200).json({
         count: allNotes.length,
         notes: allNotes,
-        all_users: `http://localhost:4001/users`
+        all_users: `http://localhost:4001/api/users`
       });
     }) // then
     .catch(err => {
@@ -89,7 +89,7 @@ NoteControllers.fetchAllNotes = (req, res, next) => {
     })
 } // fetchAllNotes
 
-// GET /notes/:username --> Retrieve all of a user's notes
+// GET /api/notes/:username --> Retrieve all of a user's notes
 NoteControllers.fetchAllUserNotes = (req, res, next) => {
   console.log(`\nfetchAllUserNotes invoked...`);
   
@@ -110,8 +110,8 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
             return res.status(500).json({
               message: 'Invalid user!',
               go_home: 'http://localhost:4001',
-              all_notes: `http://localhost:4001/notes`,
-              all_users: `http://localhost:4001/users`
+              all_notes: `http://localhost:4001/api/notes`,
+              all_users: `http://localhost:4001/api/users`
             });
           } 
           else {
@@ -123,7 +123,7 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
                 stateOrCity: note.stateOrCity,
                 town: note.town,
                 content: note.content,
-                view_note: `http://localhost:4001/notes/${note.username}/${note._id}`
+                view_note: `http://localhost:4001/api/notes/${note.username}/${note._id}`
               } 
             });
             // console.log(Array.isArray(allNotes))
@@ -133,9 +133,9 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
               res.status(200).json({
                 message: `${req.params.username} doesn't have any notes yet!`,
                 more_links: { 
-                  view_user: `http://localhost:4001/users/${req.params.username}`,
-                  all_notes: `http://localhost:4001/notes`,
-                  all_users: `http://localhost:4001/users`
+                  view_user: `http://localhost:4001/api/users/${req.params.username}`,
+                  all_notes: `http://localhost:4001/api/notes`,
+                  all_users: `http://localhost:4001/api/users`
                 }
               })
             ) : (
@@ -148,9 +148,9 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
                   username: notes[0].username,
                 },
                 more_links: { 
-                  view_user: `http://localhost:4001/users/${req.params.username}`,
-                  all_notes: `http://localhost:4001/notes`,
-                  all_users: `http://localhost:4001/users`
+                  view_user: `http://localhost:4001/api/users/${req.params.username}`,
+                  all_notes: `http://localhost:4001/api/notes`,
+                  all_users: `http://localhost:4001/api/users`
                 }
               })
             ); // return
@@ -160,8 +160,8 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
         return res.status(500).json({
           error: err,
           go_home: 'http://localhost:4001',
-          all_notes: `http://localhost:4001/notes`,
-          all_users: `http://localhost:4001/users`
+          all_notes: `http://localhost:4001/api/notes`,
+          all_users: `http://localhost:4001/api/users`
         })
       })
 
@@ -171,13 +171,13 @@ NoteControllers.fetchAllUserNotes = (req, res, next) => {
       return res.status(500).json({
         error: err,
         go_home: 'http://localhost:4001',
-        all_notes: `http://localhost:4001/notes`,
-        all_users: `http://localhost:4001/users`
+        all_notes: `http://localhost:4001/api/notes`,
+        all_users: `http://localhost:4001/api/users`
       })
     })
 } // fetchAllUserNotes
 
-// GET /notes/:username/:noteId --> Retrieve a single note for a user
+// GET /api/notes/:username/:noteId --> Retrieve a single note for a user
 NoteControllers.fetchSingleNote = (req, res, next) => {
   console.log(`\nfetchSingleNote invoked...`);
 
@@ -201,10 +201,10 @@ NoteControllers.fetchSingleNote = (req, res, next) => {
           username: note[0].username
         },
         more_links: {
-          user_notes: `http://localhost:4001/notes/${req.params.username}`,
-          all_notes: `http://localhost:4001/notes`,
-          view_user: `http://localhost:4001/users/${req.params.username}`,
-          all_users: `http://localhost:4001/users`
+          user_notes: `http://localhost:4001/api/notes/${req.params.username}`,
+          all_notes: `http://localhost:4001/api/notes`,
+          view_user: `http://localhost:4001/api/users/${req.params.username}`,
+          all_users: `http://localhost:4001/api/users`
         }
       }); // return
     }) // then
@@ -214,7 +214,7 @@ NoteControllers.fetchSingleNote = (req, res, next) => {
     })
 } // fetchSingleNote
 
-// PATCH /notes/:username/:noteId/edit --> Edit a note --> Login required
+// PATCH /api/notes/:username/:noteId/edit --> Edit a note --> Login required
 NoteControllers.editNote = (req, res, next) => {
   console.log(`\neditNote invoked...`);
 
@@ -257,7 +257,7 @@ NoteControllers.editNote = (req, res, next) => {
     })
 } // editNote
 
-// DELETE /notes/:username/:noteId/del --> Delete a note --> Login required
+// DELETE /api/notes/:username/:noteId/del --> Delete a note --> Login required
 NoteControllers.deleteNote = (req, res, next) => {
   console.log(`\neditNote invoked...`);
   
@@ -268,10 +268,10 @@ NoteControllers.deleteNote = (req, res, next) => {
       return res.status(200).json({
         message: 'Note deleted!!',
         more_links: {
-          my_notes: `http://localhost:4001/notes/${req.params.username}`,
-          all_notes: `http://localhost:4001/notes`,
-          my_page: `http://localhost:4001/users/${req.params.username}`,
-          all_users: `http://localhost:4001/users`,
+          my_notes: `http://localhost:4001/api/notes/${req.params.username}`,
+          all_notes: `http://localhost:4001/api/notes`,
+          my_page: `http://localhost:4001/api/users/${req.params.username}`,
+          all_users: `http://localhost:4001/api/users`,
           go_home: 'http://localhost:4001'
         }
       })
@@ -281,8 +281,8 @@ NoteControllers.deleteNote = (req, res, next) => {
       return res.status(500).json({
         error: err,
         go_home: 'http://localhost:4001',
-        all_notes: `http://localhost:4001/notes`,
-        all_users: `http://localhost:4001/users`
+        all_notes: `http://localhost:4001/api/notes`,
+        all_users: `http://localhost:4001/api/users`
       })
     })  
 } // deleteNote
@@ -292,23 +292,23 @@ module.exports = NoteControllers;
 
 /*
 
-->POST     /notes/:username               ---done && tested
-->GET      /notes                         ---done && tested
-->GET      /notes/:username               ---done && tested
-->GET      /notes/:username/:noteId       ---done && tested
-->PATCH    /notes/:username/:noteId/edit  ---done && tested
-->DELETE   /notes/:username/:noteId/del   ---done && tested
+->POST     /api/notes/:username               ---done && tested
+->GET      /api/notes                         ---done && tested
+->GET      /api/notes/:username               ---done && tested
+->GET      /api/notes/:username/:noteId       ---done && tested
+->PATCH    /api/notes/:username/:noteId/edit  ---done && tested
+->DELETE   /api/notes/:username/:noteId/del   ---done && tested
 
 // NoteControllers routes & handler functions
 
 Method   Route                           Function             Purpose
 
-POST     /notes/:username                createNote           Create a note for a user
-GET      /notes                          fetchAllNotes        Retrieve all notes for all users
-GET      /notes/:username                fetchAllUserNotes    Retrieve all of a user's notes
-GET      /notes/:username/:noteId        fetchSingleNote      Retrieve a single note for a user
-PATCH    /notes/:username/:noteId/edit   editNote             Edit a note
-DELETE   /notes/:username/:noteId/del    deleteNote           Delete a note
+POST     /api/notes/:username                createNote           Create a note for a user
+GET      /api/notes                          fetchAllNotes        Retrieve all notes for all users
+GET      /api/notes/:username                fetchAllUserNotes    Retrieve all of a user's notes
+GET      /api/notes/:username/:noteId        fetchSingleNote      Retrieve a single note for a user
+PATCH    /api/notes/:username/:noteId/edit   editNote             Edit a note
+DELETE   /api/notes/:username/:noteId/del    deleteNote           Delete a note
 
 // console.log(NoteControllers)
 // {
