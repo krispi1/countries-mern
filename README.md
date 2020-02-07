@@ -1,9 +1,6 @@
-# [Countries MERN api](countriesmern.netlify.com) 🚀
+# [Countries MERN api](https://countriesmern.netlify.com/) 🚀
 
 ##### Status == work-in-progress
-
-#### More on Countries MERN architecture
-For a snapshot of Countries MERN building blocks [view this file](https://github.com/krispi1/countries-mern/blob/master/Countries_MERN_Problem_Statement.js)
 
 ### Clone the project repo
 Run git clone https://github.com/krispi1/countries-mern.git in your desired directory
