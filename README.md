@@ -1,4 +1,4 @@
-# [Countries MERN api](https://countriesmern.netlify.com/) 🚀
+# [Countries MERN](https://countriesmern.netlify.com/) 🚀
 
 ##### Status == work-in-progress
 
