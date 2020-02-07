@@ -134,5 +134,9 @@ code {
   color: rgb(0, 217, 255);
 }
 
+.links-in-navbar:active {
+  color: yellow;
+}
+
 /************************    ************************/
 

@@ -1,4 +1,13 @@
+
+/**
+ *
+ *
+ * @param {*} str
+ * @param {*} tableSize
+ * @returns {number} An integer value representing the str.
+ */
 function hashStringToInt(str, tableSize) {
+    
   let hash = 23; // An arbitrary prime number
 
   for (let i = 0; i < str.length; i++) {
@@ -8,10 +17,17 @@ function hashStringToInt(str, tableSize) {
   return hash;
 }; // hashStringToInt
 
+
 class HashTable {
   table = new Array(3);
   numItems = 0;
 
+  /**
+  * HashTable.resize scales the size of the table on demand
+  * based on how full the array is, i.e. the loadFactor:
+  * (the ratio of itemsInArray / arrayLength).
+  *
+  */
   resize = () => {
     const newTable = new Array(this.table.length * 2);
     this.table.forEach(item => {
@@ -47,7 +63,7 @@ class HashTable {
 
   getItem = key => {
     const idx = hashStringToInt(key, this.table.length)
-
+   
     try {
       if (!this.table[idx]) {
         throw new Error('Item not found');
@@ -56,7 +72,6 @@ class HashTable {
     } catch (err) {
       return err;
     }
-    
   } // getItem
 
 }; // HashTable

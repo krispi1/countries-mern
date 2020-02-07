@@ -5,13 +5,12 @@ import jwt_decode from 'jwt-decode';
 const AuthService = {};
 
 /**
- * AuthService.signup takes a newUser object, posts it to the
- * backend service.
+ * AuthService.signup takes a newUser object and posts it to 
+ * the backend service.
  * 
  * @param {*} newUser
- * @returns {object} User object on success or custom signUpError 
+ * @returns {object} undefined on success or custom signUpError 
  *    object on failure. 
- *
  */
 AuthService.signup = newUser => {
   return axios
@@ -34,18 +33,15 @@ AuthService.signup = newUser => {
     })
 } // signup
 
-
 /**
  * AuthService.login takes a user object and makes a post 
  * request to the server with the user payload.
  * 
  * @param {*} user
- * @returns {(boolean | object)} Boolean for successful log in;
+ * @returns {(boolean | object)} Boolean for log in status;
  *    or an error object upon login error.
- * 
  */ 
 AuthService.login = user => {
-  
   return axios
     // Send user data (POST) to the server at /auth/login endpoint
     .post(
@@ -60,7 +56,7 @@ AuthService.login = user => {
         window.localStorage.setItem('bearerToken', JSON.stringify(res.data.bearerToken));
         const decoded = jwt_decode(res.data.bearerToken);
         window.localStorage.setItem('user', decoded.username);
-        window.location.href = '/';// Redirect the user
+        window.location.href = '/'; // Redirect the user
         
         return true;
       } else {
@@ -73,15 +69,13 @@ AuthService.login = user => {
     })
 } // login
 
-
 /**
  * AuthService.logout discards user credentials from the local
  * storage thereby effectively triggering the UserContext
  * to update accordingly.
  *
  * @param {}
- * @returns {}
- * 
+ * @returns {} undefined
  */
 AuthService.logout = () => {
   window.localStorage.removeItem("bearerToken");
@@ -90,5 +84,3 @@ AuthService.logout = () => {
 } // logout
 
 export default AuthService;
-
-

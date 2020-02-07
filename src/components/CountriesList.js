@@ -13,13 +13,12 @@ import HashTable from '../utils/hashTable';
  * 
  * 
  * 
- * @param {*} props
+ * @param {*} history
  * @returns
  */
-function CountriesList(props) {
+function CountriesList({ history }) {
   
   const { countries } = useContext(CountriesContext);
-  const { history } = props;
 
   // Declare a new hash table
   const countriesHT = new HashTable();
@@ -30,16 +29,17 @@ function CountriesList(props) {
     // e.g. key kenya, value kenya
     () => {
       countries.map(country => {
-        country = country.name.toLowerCase()
+        
         return countriesHT.setItem(
-          country, country
+          country.name, country.name
         );
       })
     }
   )()
 
   const [country2Find, setCountry2Find] = useState('');
-
+  
+  // console.log(Array.isArray(countriesHT.table));
   console.log(history);
 
   /**
@@ -55,44 +55,49 @@ function CountriesList(props) {
       If it's not found, fail gracefully.
       If found, navigate to its page.
     */
-    console.log('>>>>options<<<<');
-    // console.log(event.target.value);
-    console.log('--countriesHT.getItem(event.target.value)--');
+    
+    console.log('\n>>>>searchTerm<<<<');
+    console.log(country);
+    console.log('>>>>String(searchTerm)[0].toUpperCase()<<<<');
+    console.log(String(country)[0].toUpperCase());
+    console.log('>>>>String(searchTerm).slice[1]<<<<');
+    console.log(country.slice(1));
+    country = String(country)[0].toUpperCase()+String(country).slice(1)
+    console.log('>>>>searchTerm formatted<<<<');
+    console.log(country);
+    
+    console.log('--countriesHT.getItem(formattedSearchTerm)--');
     console.log(countriesHT.getItem(country));
+    console.log('');
+
 
     try {
       if (countriesHT.getItem(country)) {
         const countryURL = `/countries/${(country).toLowerCase()}`;
         console.log(countryURL);
-        history.push(countryURL)
+        history.push(countryURL); // Navigate to country's page
       } else {
         throw new Error('Country not found!');
       }
-    } catch(e) {
-      console.log(e)
+    } catch(err) {
+      console.log(err)
       // window.location.reload();
       // history.push('/');
-      return;
+      return err;
     }
   } // searchCountry
 
   const onChangeHandler = event => {
-    setCountry2Find(event.target.value.toLowerCase());
+    setCountry2Find(event.target.value);
   } // onChangeHandler
   
   // Navigate to a given country's page upon pressing enter
   const onKeyPressHandler = event => {
     
     if (event.key === 'Enter') {
-      // alert('Pressed enter');
-      console.log('--countryQuest--');
-      console.log(country2Find);
       searchCountry(country2Find);
       setCountry2Find('');
     }
-    
-    console.log('--key--');
-    console.log(event.key);
     // event.target.value =  '';
   } // onKeyPressHandler
 
