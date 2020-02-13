@@ -1,128 +1,211 @@
 // Modules
-import React, { useContext, useState } from 'react';
-import { withRouter } from 'react-router-dom';
+import React, { useContext, useState } from "react";
+import { withRouter } from "react-router-dom";
 
-// Contexts
-import { CountriesContext } from '../contexts/CountriesContext';
+// Context
+import { CountriesContext } from "../contexts/CountriesContext";
 
 // Helper
-import HashTable from '../utils/hashTable';
+import HashTable from "../utils/hashTable";
 
 /**
- * CountriesList
- * 
- * 
- * 
- * @param {*} history
- * @returns
+ * CountriesList is a Functional Component 
+ *
+ *
+ *
+ * @param {} history
+ * @returns {object}
  */
 function CountriesList({ history }) {
-  
   const { countries } = useContext(CountriesContext);
 
   // Declare a new hash table
+  // https://www.youtube.com/watch?v=UOxTMOCTEZk&t=178s
+  // http://www.andygup.net/fastest-way-to-find-an-item-in-a-javascript-array/
+  // Time complexity for HashTable lookup is O(1) -- very fast
   const countriesHT = new HashTable();
 
-  ( 
-    // Populate hash table with country names in small letters
-    // where key-value pairs are the same for each country
-    // e.g. key kenya, value kenya
-    () => {
-      countries.map(country => {
-        
-        return countriesHT.setItem(
-          country.name, country.name
-        );
-      })
-    }
-  )()
+  // Populate hash table with country names where key-value
+  // pairs are the same for each country e.g. 
+  // key Kenya, value Kenya
+  (() => {
+    countries.map(country => {
+      return countriesHT.setItem(country.name, country.name);
+    });
+  })();
 
-  const [country2Find, setCountry2Find] = useState('');
-  
+  const [country2Find, setCountry2Find] = useState("");
+
   // console.log(Array.isArray(countriesHT.table));
-  console.log(history);
+  // console.log(history);
+  
+  
+  /**
+   * clearErrorDiv is a helper function that clears the 
+   * errorDiv below after duration(seconds) has elapsed 
+   * in case the search key supplied to the search
+   * field did not match the characters contained in any 
+   * country name. It's called by searchCountry.
+   *    
+   * @param {*} duration
+   * @returns undefined
+   */
+  function clearErrorDiv(duration) {
+    if (
+      document.getElementById("countryError").textContent !== ""
+    ) {
+      const timer = setInterval(() => {
+        duration -= 1;
+        if (duration ===0) {
+          document.getElementById("countryError").textContent = ""
+          clearInterval(timer);
+          return;
+        }
+      }, 1000);
+    }
+  } // clearErrorDiv
+
 
   /**
    *
    *
+   * @param {*} country
+   * @returns
    */
   function searchCountry(country) {
-    console.log('searchCountry invoked..');
+    console.log("searchCountry invoked..");
     // Call when either an item (country) is selected, or enter is pressed.
     /** Pseudocode
-      Grab selected item.
+      Grab selected item (country).
       Check if selected item is in data list (actual list passed to datalist).
       If it's not found, fail gracefully.
       If found, navigate to its page.
     */
-    
-    console.log('\n>>>>searchTerm<<<<');
+
+    if (!country) {
+      return;
+    }
+
+    // Troubleshooting
+    console.log("\n>>>>searchTerm<<<<");
     console.log(country);
-    console.log('>>>>String(searchTerm)[0].toUpperCase()<<<<');
+    console.log(">>>>String(searchTerm)[0].toUpperCase()<<<<");
     console.log(String(country)[0].toUpperCase());
-    console.log('>>>>String(searchTerm).slice[1]<<<<');
+    console.log(">>>>String(searchTerm).slice[1]<<<<");
     console.log(country.slice(1));
-    country = String(country)[0].toUpperCase()+String(country).slice(1)
-    console.log('>>>>searchTerm formatted<<<<');
+    country = String(country)[0].toUpperCase() + String(country).slice(1);
+    console.log(">>>>formatted_SearchTerm<<<<");
     console.log(country);
-    
-    console.log('--countriesHT.getItem(formattedSearchTerm)--');
+    console.log("--result from--countriesHT.getItem(formatted_SearchTerm)--");
     console.log(countriesHT.getItem(country));
-    console.log('');
+    console.log("");
 
+    let targetCountry = countriesHT.getItem(country);
 
-    try {
-      if (countriesHT.getItem(country)) {
-        const countryURL = `/countries/${(country).toLowerCase()}`;
-        console.log(countryURL);
+    // Troubleshooting
+    console.log(typeof targetCountry);
+    console.log(String(targetCountry));
+    console.log(targetCountry);
+    console.log("");
+
+    // Troubleshooting
+    if (targetCountry === undefined) {
+      console.log('----erratic----');
+    }
+
+    if (String(typeof targetCountry) === 'object') {
+      console.log('----erratic object----');
+    }
+
+    // Failing gracefully without crashing the app is really
+    // key. This try{}catch(){} block addresses exactly that.
+    try { 
+      // No country matching search key exactly was found in countriesHT.
+      if (
+        targetCountry === undefined ||
+        String(typeof targetCountry) === "object"
+      ) {
+        // Resort to looking for the country in the original data
+        // by checking whether the country name in data contains
+        // the string provided as the search key.
+        const lrCountry = countries.filter(item => {
+          
+          // Hard code the case for USA.
+          if (
+            country.toLowerCase() === 'usa' ||
+            country.toLowerCase() === 'us' ||
+            country.toLowerCase() === 'america' ||
+            country.toLowerCase() === 'united states'
+          ) {
+            country = 'United States of America'
+          }
+
+          // We convert everything to lower case for accurate matching.
+          return item.name.toLowerCase().includes(country.toLowerCase());
+        });
+
+        // Troubleshooting
+        console.log("--lrCountry--");
+        console.log(lrCountry);
+        console.log("--lrCountry[0]--");
+        console.log(lrCountry[0]);
+
+        const countryURL = `/countries/${lrCountry[0].name.toLowerCase()}`;
         history.push(countryURL); // Navigate to country's page
+
       } else {
-        throw new Error('Country not found!');
+        // A country matching search key was found.
+        if (countriesHT.getItem(country)) {
+          const countryURL = `/countries/${country.toLowerCase()}`;
+          console.log(countryURL);
+          history.push(countryURL); // Navigate to country's page
+        }
       }
-    } catch(err) {
-      console.log(err)
-      // window.location.reload();
-      // history.push('/');
-      return err;
+    } catch (err) {
+      // console.log(err)
+      if (err) {
+        document.getElementById(
+          "countryError"
+        ).innerHTML = `<strong>${country}</strong> is probably not a valid country name!`;
+        clearErrorDiv(5);
+      }
     }
   } // searchCountry
 
   const onChangeHandler = event => {
     setCountry2Find(event.target.value);
-  } // onChangeHandler
-  
-  // Navigate to a given country's page upon pressing enter
+  }; // onChangeHandler
+
+  // Navigate to a given country's page upon pressing enter.
   const onKeyPressHandler = event => {
-    
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       searchCountry(country2Find);
-      setCountry2Find('');
+      setCountry2Find("");
     }
     // event.target.value =  '';
-  } // onKeyPressHandler
+  }; // onKeyPressHandler
 
   return (
     <div>
-      <input 
-        type="text" 
+      <input
+        type="text"
         list="countriesList"
         name="countrieslist"
-        id="countriesDLInput" 
+        id="countriesDLInput"
         placeholder="Search Country"
         value={country2Find}
-        onKeyPress={ onKeyPressHandler }
-        onChange={ event => onChangeHandler(event) }
+        onKeyPress={onKeyPressHandler}
+        onChange={event => onChangeHandler(event)}
       />
-      <datalist id="countriesList" style={{ "height": "300px" }}>
-        {
-          countries && countries.map((country, index) =>
-            <option key={index}
-            >{country.name}</option>
-          )
-        }
+      <div id="countryError" style={{ marginTop: "5px", color: "red" }}></div>
+      <datalist id="countriesList" style={{ height: "300px" }}>
+        {countries &&
+          countries.map((country, index) => (
+            <option key={index}>{country.name}</option>
+          ))}
       </datalist>
     </div>
-  ) // return
+  ); // return
 } // CountriesList
 
 export default withRouter(CountriesList);
