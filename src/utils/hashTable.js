@@ -1,6 +1,8 @@
 
 /**
- *
+ * hashStringToInt takes a given string and converts it 
+ * into an integer which shall then be used as an index
+ * to store and reference the string in the hash table. 
  *
  * @param {*} str
  * @param {*} tableSize
@@ -26,7 +28,8 @@ class HashTable {
   * HashTable.resize scales the size of the table on demand
   * based on how full the array is, i.e. the loadFactor:
   * (the ratio of itemsInArray / arrayLength).
-  *
+  * @param {} 
+  * @returns {}
   */
   resize = () => {
     const newTable = new Array(this.table.length * 2);
@@ -60,15 +63,18 @@ class HashTable {
       this.table[idx] = [[key, value]];
     }
   } // setItem
-
+  
   getItem = key => {
     const idx = hashStringToInt(key, this.table.length)
    
     try {
       if (!this.table[idx]) {
-        throw new Error('Item not found');
-      }
-      return this.table[idx].find(x => x[0] === key)[1];
+        return undefined;
+        // throw new Error('Item not found');
+      } 
+      
+      return this.table[idx].find(x => x[0] === key)[1];  
+      
     } catch (err) {
       return err;
     }
@@ -77,3 +83,4 @@ class HashTable {
 }; // HashTable
 
 export default HashTable;
+console.log('Quokka running??');
