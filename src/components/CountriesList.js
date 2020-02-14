@@ -8,14 +8,7 @@ import { CountriesContext } from "../contexts/CountriesContext";
 // Helper
 import HashTable from "../utils/hashTable";
 
-/**
- * CountriesList is a Functional Component 
- *
- *
- *
- * @param {} history
- * @returns {object}
- */
+
 function CountriesList({ history }) {
   const { countries } = useContext(CountriesContext);
 
@@ -43,10 +36,10 @@ function CountriesList({ history }) {
   /**
    * clearErrorDiv is a helper function that clears the 
    * errorDiv below after duration(seconds) has elapsed 
-   * in case the search key supplied to the search
-   * field did not match the characters contained in any 
-   * country name. It's called by searchCountry.
-   *    
+   * It's called by searchCountry in case the search key 
+   * supplied to the search field did not match the 
+   * characters contained in any country name. 
+   * 
    * @param {*} duration
    * @returns undefined
    */
@@ -66,12 +59,6 @@ function CountriesList({ history }) {
   } // clearErrorDiv
 
 
-  /**
-   *
-   *
-   * @param {*} country
-   * @returns
-   */
   function searchCountry(country) {
     console.log("searchCountry invoked..");
     // Call when either an item (country) is selected, or enter is pressed.
@@ -130,7 +117,7 @@ function CountriesList({ history }) {
         // the string provided as the search key.
         const lrCountry = countries.filter(item => {
           
-          // Hard code the case for USA.
+          // Hard-code the case for USA.
           if (
             country.toLowerCase() === 'usa' ||
             country.toLowerCase() === 'us' ||

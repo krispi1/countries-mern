@@ -5,7 +5,7 @@ import { CountriesContext } from '../contexts/CountriesContext';
 
 
 function Country({ match }) {
-  console.log('Rendering Country...')
+  console.log('Country rendering...');
   
   const { countries } = useContext(CountriesContext);
   
@@ -24,8 +24,9 @@ function Country({ match }) {
     return <div className="content-area">
         <br/> 
         <span style={{ color: 'red', fontSize: '1.9em' }}>
-          Error: <strong>{ match.params.name }</strong> ☝️ is not a valid country name.
-        </span><br/><br/>
+          Error: <strong>{ match.params.name }</strong> ☝️ is 
+          not a valid country route. Try using the search 
+          feature.</span><br/><br/>
       </div>
   }
 
