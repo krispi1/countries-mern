@@ -75,7 +75,7 @@ function Countries({ history }) {
     // Test for when we surpass the maximum number of items.
     // The application actually wouldn't break, but it's good
     // practice.
-    if (end > dataArray.length) {
+    if (start > dataArray.length) {
       document.getElementById("next-button1").disabled = true;
       document.getElementById("next-button2").disabled = true;
       return;
