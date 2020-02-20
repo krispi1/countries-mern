@@ -4,6 +4,7 @@ import jwt_decode from 'jwt-decode';
 // AuthService shall hold all authentication services.
 const AuthService = {};
 
+
 /**
  * AuthService.signup takes a newUser object and posts it to 
  * the backend service.
@@ -33,6 +34,7 @@ AuthService.signup = newUser => {
     })
 } // signup
 
+
 /**
  * AuthService.login takes a user object and makes a post 
  * request to the server with the user payload.
@@ -43,7 +45,7 @@ AuthService.signup = newUser => {
  */ 
 AuthService.login = user => {
   return axios
-    // Send user data (POST) to the server at /auth/login endpoint
+    // Send user data (POST) to the server at /api/auth/login endpoint
     .post(
       '/api/auth/login',
       {
@@ -56,7 +58,7 @@ AuthService.login = user => {
         window.localStorage.setItem('bearerToken', JSON.stringify(res.data.bearerToken));
         const decoded = jwt_decode(res.data.bearerToken);
         window.localStorage.setItem('user', decoded.username);
-        window.location.href = '/'; // Redirect the user
+        window.location.href = '/goodies'; // Redirect the user
         
         return true;
       } else {
@@ -68,6 +70,7 @@ AuthService.login = user => {
       return { loginError: err };
     })
 } // login
+
 
 /**
  * AuthService.logout discards user credentials from the local
