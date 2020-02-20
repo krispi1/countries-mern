@@ -1,22 +1,31 @@
 import React, { useContext } from 'react';
 import { Route, Redirect } from 'react-router-dom';
 
+// Context
 import { UserContext } from '../contexts/UserContext';
 
 
 function PrivateRoute({ children, ...rest }) {
 
-  const { isLoggedIn } = useContext(UserContext);
-  console.log(isLoggedIn);
+  const { user, isLoggedIn, userToken } = useContext(UserContext);
+  console.log(`isLoggedIn? ${isLoggedIn}`);
+  console.log('userToken? ', (userToken ? userToken : 'No--token'));
+  
   return (
     <Route
       {...rest}
       render={({ location }) => 
-        isLoggedIn ? (
+        (
+          userToken === 
+          JSON.parse(window.localStorage.getItem('bearerToken')) &&
+          user === window.localStorage.getItem('user')
+        ) ? (
           children
         ) : (
           <>
-            {alert('You must log in to view that page!')}
+            {alert('Please log in to view this page!')}
+            {window.localStorage.removeItem("bearerToken")}
+            {window.localStorage.removeItem("user")}
             <Redirect 
               to={{
                 pathname: '/signin',
@@ -25,7 +34,7 @@ function PrivateRoute({ children, ...rest }) {
             />
           </>
         )
-      }
+      } // render
     />
   ) // return 
 } // PrivateRoute
