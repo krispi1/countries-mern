@@ -29,3 +29,4 @@ You will also see any lint errors in the console.
 006. [HTTP Status Codes](https://en.wikipedia.org/wiki/List_of_HTTP_status_codes)
 007. [Fastest way to find an item in a JS array](http://www.andygup.net/fastest-way-to-find-an-item-in-a-javascript-array/)
 008. [Documenting JavaScript code](https://gomakethings.com/whats-the-best-way-to-document-javascript/)
+009. [Fastest way to find something](http://www.andygup.net/fastest-way-to-find-an-item-in-a-javascript-array/)
