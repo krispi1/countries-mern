@@ -1,6 +1,7 @@
 import React, { createContext, useState, memo, useMemo } from 'react';
 
-export const UserContext = createContext();
+export const UserContext  = createContext();
+
 
 /**
  * SetUserContext creates a global user object 
@@ -11,31 +12,32 @@ export const UserContext = createContext();
  * @returns UserContext.Provider Higher Order Component
  */
 function SetUserContext({ children }) {
-  
   console.log('SetUserContext running...');
   
+  const [userToken, setUserToken] = useState('');
   const [user, setUser] = useState({});
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   /**
-  * fetchUserData checks the localStorage for user credentials
-  * and updates both the global states of user and isLoggedIn
-  * accordingly.
-  *
-  * @param {*} 
-  * @returns
-  *
-  */
-  const fetchUserData = (user, isLoggedIn) => {
-    
+   * fetchUserData is an impure function that checks the localStorage for 
+   * user credentials and updates both the global states for user and 
+   * isLoggedIn accordingly.
+   *
+   * @param {*} user
+   * @param {*} isLoggedIn
+   * @param {*} userToken
+   */
+  const fetchUserData = (user, isLoggedIn, userToken) => {
     if (
       JSON.parse(
       window.localStorage.getItem('bearerToken')
-     ) === null||
+     ) === null ||
       window.localStorage.getItem('user')
         === ''
     ) {
-      // Set user to the string 'guest
+      // If either the bearerToken or the user signifies that the user is
+      // not logged in, remove them both from the localStorage and set their 
+      // states to their default values.
       setUser('guest');
       setIsLoggedIn(false);
       window.localStorage.removeItem('user');
@@ -44,15 +46,16 @@ function SetUserContext({ children }) {
     else {
       // Retrieve from the localStorage
       setUser(window.localStorage.getItem('user'));
+      setUserToken(JSON.parse(window.localStorage.getItem('bearerToken')));
       setIsLoggedIn(true);
       console.log('Pulling user from localStorage..');
     }
   } // fetchUserData
 
-  useMemo(fetchUserData, [user, isLoggedIn]);
+  useMemo(fetchUserData, [user, isLoggedIn, userToken]);
   
   return (
-    <UserContext.Provider value={{ user, isLoggedIn }}>
+    <UserContext.Provider value={{ user, isLoggedIn, userToken }}>
       {children}      
     </UserContext.Provider>
   )
