@@ -1,7 +1,16 @@
 import React, { useContext, useState } from "react";
 
+import Paginator from './Paginator';
+
 // Context
 import { CountriesContext } from "../contexts/CountriesContext";
+
+// Material-UI
+import Button from '@material-ui/core/Button';
+
+// Declare refs for our buttons
+const nextButtonRef = React.createRef();
+const prevButtonRef = React.createRef();
 
 function Countries({ history }) {
   console.log("Countries rendering...");
@@ -9,12 +18,19 @@ function Countries({ history }) {
   const { countries } = useContext(CountriesContext);
   console.log(countries[118]);
 
-  // We declare the size for the first batch of countries 
-  // to display by setting sliceSize to 12 (countries).
-  // sliceSize, sliceStart && sliceEnd are integers.
-  const [sliceSize, setSliceSize] = useState(12);
+  // Fish out itemsPerPage from the localStorage.
+  const itemsPerPage = 
+    Number(window.localStorage.getItem('itemsPerPage'));
+  
+  // We declare the size of the first batch of countries
+  // to display by setting sliceSize to 12 (countries) or
+  // whatever number we retrieved from the localStorage.
+  // sliceSize, sliceStart & sliceEnd are integers.
+  const [sliceSize, setSliceSize]   = useState(itemsPerPage ? itemsPerPage : 12);
   const [sliceStart, setSliceStart] = useState(0);
   const [sliceEnd, setSliceEnd]     = useState(sliceSize);
+
+  const [iPPError, setIPPError]     = useState('');
 
   /**
    * validateSliceSize is a pure function that receives
@@ -60,6 +76,9 @@ function Countries({ history }) {
    * @returns {} undefined
    */
   function nextSlice(sliceSizeInput, dataArray) {
+    if (nextButtonRef.current.disabled) {
+      return;
+    }
     const chunkSize = validateSliceSize(sliceSizeInput, dataArray);
 
     console.log('--chunkSize--')
@@ -69,15 +88,13 @@ function Countries({ history }) {
 
     // At this point we know that there's room to click prev
     // so we enable the prev buttons.
-    document.getElementById("prev-button1").disabled = false;
-    document.getElementById("prev-button2").disabled = false;
-    
-    // Test for when we surpass the maximum number of items.
+    prevButtonRef.current.disabled = false;
+
+    // Disable next when we surpass the maximum number of items.
     // The application actually wouldn't break, but it's good
     // practice.
     if (start > dataArray.length) {
-      document.getElementById("next-button1").disabled = true;
-      document.getElementById("next-button2").disabled = true;
+      nextButtonRef.current.disabled = true;
       return;
     }
 
@@ -105,24 +122,28 @@ function Countries({ history }) {
    * @param {*} dataArray
    * @returns {} undefined
    */
-  function prevSlice(sliceSizeInput, dataArray) {
+  function prevSlice(sliceSizeInput, dataArray, event) {
+    if (prevButtonRef.current.disabled) {
+      return;
+    }
+
     const chunkSize = validateSliceSize(sliceSizeInput, dataArray);
-    
     let start = sliceStart - chunkSize;
     let end   = sliceEnd - chunkSize;
 
     // At this point we know that there's room to click next
     // so we enable the next buttons.
-    document.getElementById("next-button1").disabled = false;
-    document.getElementById("next-button2").disabled = false;
-    
+    nextButtonRef.current.disabled = false;
+
     // Test for when we surpass index 0 tending towards
     // the negative.
     if (start < 0 || end < 0) {
       start = 0;
       end   = start + chunkSize;
-      document.getElementById("prev-button1").disabled = true;
-      document.getElementById("prev-button2").disabled = true;
+      
+      // At this point we know we've reached the first data item &
+      // there's no more room to click so we disable the prev buttons.
+      prevButtonRef.current.disabled = true;
       return;
     }
 
@@ -138,113 +159,250 @@ function Countries({ history }) {
     setSliceEnd(Math.floor(end));
 
   } // prevSlice
-  
+
   // Navigate to a given country's page upon clicking on it.
   const onClickHandler = country => {
     history.push(`/countries/${country.name.toLowerCase()}`);
   };
 
+  const sliceSizeHandler = event => {
+    const keyCode = event.keyCode;
+    // If enter was pressed..
+    if (keyCode === 13) {
+      if (!!isNaN(Number(event.target.value))) {
+        setIPPError('Items Per Page must be a Number');
+      } 
+      else {
+        setSliceSize(event.target.value);
+        window.localStorage.setItem('itemsPerPage', String(event.target.value));
+        window.location.reload();
+      }
+      
+      event.target.value = '';
+    }
+  } // sliceSizeHandler
+
+  const onChangeHandler = () => {
+    setIPPError('');
+  } // onChangeHandler
+
+
   return (
-    <div className="countries">
-      <button 
-        id="prev-button1"
-        className="page-button" 
-        onClick={ () => prevSlice(sliceSize, countries) }
-      >{` prev <<< `}</button>
+    <>
+      <div>
+        <div id="itemsPerPageError">{iPPError && iPPError}</div>
+        <input 
+          placeholder="Items Per Page" 
+          type="text"
+          className="items-per-page"
+          onChange = { onChangeHandler }
+          onKeyUp={ event => sliceSizeHandler(event) }
+          style={
+            {
+              textAlign: 'center',
+              margin: '3px 0',
+              marginRight: '5px',
+              backgroundColor: 'black',
+              padding: '2px',
+              color: 'orange',
+              height: '30px',
+              fontSize: '1.2em',
+              width: '180px'
+            }
+          }
+        />{itemsPerPage || 12}
+      </div>
       
-      <button 
-        id="next-button1"
-        className="page-button" 
-        onClick={ () => nextSlice(sliceSize, countries) }
-      >{` next >>> `}</button>
+      <div>
+        <Paginator 
+          pageSize= { sliceSize } 
+          dataArray={ countries }
+          validateSliceSize={ validateSliceSize }
+        />
+      </div>
+
+      <div className="page-buttons-div">
+        <div>
+          <Button 
+            id="prev-button1"
+            ref={prevButtonRef}
+            variant="contained"
+            color="secondary"
+            size="small"
+            className="prev-lbutton pb-length" 
+            onClick={ () => prevSlice(sliceSize, countries) }
+          >
+            {` <<< prev `}
+          </Button>
+        </div>
+
+        <div>
+          <Button 
+            id="next-button1"
+            ref={nextButtonRef}
+            variant="contained" 
+            color="secondary"
+            size="small"
+            className="next-rbutton pb-length"
+            onClick={ (event) => nextSlice(sliceSize, countries) }
+          >
+            {` next >>> `}
+          </Button>
+        </div> <br/><br/>
+      </div>
       
-      {countries &&
-        countries.slice(sliceStart, sliceEnd).map((country, index) => {
-          const {
-            name, topLevelDomain, alpha2Code, alpha3Code,
-            callingCodes, capital, region, subregion,
-            population, latlng, flag 
+      <div className="countries">
+        {countries &&
+          countries
+            .slice(sliceStart, sliceEnd)
+            .map((country, index) => {
             
-            /*  demonym, area, timezones, 
-            borders, nativeName, numericCode, currencies, 
-            languages, translations, regionalBlocs */
-          } = country;
+            // Extract the values we need from the country object.
+            const {
+              name, callingCodes, capital, region,
+              subregion, population, flag, area 
+            } = country;
 
-          /* console.log(
-            name, topLevelDomain[0], callingCodes[0],
-            capital, region, subregion, population, '\n\n'
-          ); */
+            return (
+              <div
+                className="country-div animate fadeInUp country"
+                key={index}
+                onClick={() => onClickHandler(country)}
+              >
+                <table>
+                  <thead>
+                    <tr>
+                      <th colSpan="2"><h1><strong>{name.toUpperCase()}</strong></h1></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td colSpan="2">
+                        <img
+                          src={flag}
+                          width={"100%"}
+                          height={"150px"}
+                          alt={`${name} flag`}
+                          style={{
+                            padding: "5px"
+                          }}
+                        />
+                      </td>
+                    </tr>
+                    
+                    <tr className="trow">
+                      <td>{capital && 'Capital'}</td>
+                      <td>{capital && capital}</td>
+                    </tr>
 
-          return (
-            <div
-              className="country-div animate fadeInUp country"
-              key={index}
-              onClick={() => onClickHandler(country)}
-            >
-              <h1>
-                <strong>{name.toUpperCase()}</strong>
-              </h1>
-              <img
-                src={flag}
-                width={"100%"}
-                height={"150px"}
-                alt={`${name} flag`}
-                style={{
-                  padding: "5px"
-                }}
-              />
-              <p>
-                {`Capital: ${capital}, Alpha2Code: ${alpha2Code}, 
-                  Alpha3Code: ${alpha3Code}, Calling Code: ${callingCodes}`}
-              </p>
-              <p>
-                {`Region: ${region}, Sub Region: ${subregion}, 
-                  Population: ${population}`}
-              </p>
-              <p>
-                {`Top Level Domain: ${topLevelDomain}, Latitude: ${latlng[0]}, Longitude: ${latlng[1]}`}
-              </p>
-              {/* 
-              <p>
-                {`Demonym: ${demonym}, Area: ${area}, 
-                  Native Name: ${nativeName}, Numeric Code: ${numericCode}`
-                }
-              </p>
-              <p>
-                {`Borders: ${borders.toString()}, Timezone: ${timezones.toString()}`}
-              </p>
-              <p>
-                {`Currencies: ${JSON.stringify(currencies)}`}
-              </p>
-              <p>
-                {`Languages: ${JSON.stringify(languages)}`}
-              </p>
-              <p>
-                {`translations: ${JSON.stringify(translations)}`}
-              </p>
-              <p>
-                {`Regional Blocs: ${JSON.stringify(regionalBlocs)}`}
-              </p>
-                 */}
-              <br />
-            </div>
-          ); // return
-        }) // countries.map
-       }
+                    <tr className="trow">
+                      <td>{callingCodes[0] && 'Calling Code'}</td>
+                      <td>{callingCodes && callingCodes}</td>
+                    </tr>
 
-      <button 
-        id="prev-button2"
-        className="page-button-bottom" 
-        onClick={ () => prevSlice(sliceSize, countries) }
-      >{` prev <<< `}</button>
-      
-      <button 
-        id="next-button2"
-        disabled={false}
-        className="page-button-bottom" 
-        onClick={ () => nextSlice(sliceSize, countries) }
-      >{` next >>> `}</button>
-    </div>
+                    <tr className="trow">
+                      <td>{region && 'Region'}</td>
+                      <td>{region && region}</td>
+                    </tr>
+
+                    <tr className="trow">
+                      <td>{subregion && 'Sub Region'}</td>
+                      <td>{subregion && subregion}</td>
+                    </tr>
+
+                    <tr className="trow">
+                      <td>{'Population'}</td>
+                      <td>
+                        {
+                          population ? 
+                          (population.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : 
+                          'Not provided!'
+                        }
+                      </td>
+                    </tr>
+
+                    <tr className="trow">
+                      <td>{'Area (sq. Km)'}</td>
+                      <td>
+                        {
+                          area ? 
+                          (area.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")) : 
+                          'Not provided!'
+
+                        }
+                      </td>
+                    </tr>
+
+                    <tr className="trow">
+                      <td>{'People / (sq. Km)'}</td>
+                      <td>
+                        {
+                          (
+                            (population === 0) || 
+                            ((population / area) === null) || 
+                            ((population / area) === Infinity)
+                          ) ? 
+                          'Not computed!' : 
+                          (
+                            ((population / area) % 1 === 0) ? 
+                            (population / area) :
+                            (population / area).toFixed(5)
+                          )
+                        }
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+                <br />
+              </div>
+            ); // return
+          }) // countries.map
+        }
+      </div>
+
+      <div className="page-buttons-divbottom">
+        <Button 
+          id="prev-button2"
+          ref={prevButtonRef}
+          variant="contained" 
+          color="secondary"
+          size="small"
+          className="prev-lbutton pb-length" 
+          onClick={ () => prevSlice(sliceSize, countries) }
+        >
+          {` <<< prev `}
+        </Button>
+
+        <Button 
+          id="next-button2"
+          ref={nextButtonRef}
+          variant="contained" 
+          color="secondary"
+          size="small"
+          className="next-rbutton pb-length"
+          onClick={ () => nextSlice(sliceSize, countries) }
+        >
+          {` next >>> `}
+        </Button> <br/>
+
+     
+    {/* These are left here for comparison with regular buttons */}
+    {/* <button 
+          id="prev-button2"
+          color="primary"
+          className="prev-lbutton pb-length" 
+          onClick={ () => prevSlice(sliceSize, countries) }
+        >{` prev <<< `}</button> 
+        
+        <button 
+          id="next-button2"
+          color="primary"
+          className="next-rbutton pb-length" 
+          onClick={ () => nextSlice(sliceSize, countries) }
+        >{` next >>> `}</button> <br/> */}
+
+      </div>
+    </>
   ); // return
 } // Countries
 
