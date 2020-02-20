@@ -1,4 +1,3 @@
-
 /**
  * hashStringToInt takes a given string and converts it 
  * into an integer which shall then be used as an index
@@ -83,4 +82,3 @@ class HashTable {
 }; // HashTable
 
 export default HashTable;
-console.log('Quokka running??');
