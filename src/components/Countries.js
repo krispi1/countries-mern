@@ -8,6 +8,9 @@ import { CountriesContext } from "../contexts/CountriesContext";
 // Material-UI
 import Button from '@material-ui/core/Button';
 
+// Helper
+import clearErrorDiv from '../utils/clearErrorDiv';
+
 // Declare refs for our buttons
 const nextButtonRef = React.createRef();
 const prevButtonRef = React.createRef();
@@ -29,8 +32,6 @@ function Countries({ history }) {
   const [sliceSize, setSliceSize]   = useState(itemsPerPage ? itemsPerPage : 12);
   const [sliceStart, setSliceStart] = useState(0);
   const [sliceEnd, setSliceEnd]     = useState(sliceSize);
-
-  const [iPPError, setIPPError]     = useState('');
 
   /**
    * validateSliceSize is a pure function that receives
@@ -56,6 +57,11 @@ function Countries({ history }) {
       isNaN(chunkSize)
     ) {
       chunkSize = 12;
+    }
+
+    // If chunkSize is a zero, force it to 1
+    if (chunkSize === 0) {
+      chunkSize = 1;
     }
 
     // If chunkSize is larger than the data (countries) size..
@@ -170,38 +176,53 @@ function Countries({ history }) {
     // If enter was pressed..
     if (keyCode === 13) {
       if (!!isNaN(Number(event.target.value))) {
-        setIPPError('Items Per Page must be a Number');
-      } 
+        document
+          .getElementById('itemsPerPageError')
+          .textContent = '😮 Items Per Page must be a Number';
+        
+        // Clear the div with id (second parameter) after 
+        // duration (first parameter) elapses.
+        clearErrorDiv(5, 'itemsPerPageError');
+      } else 
+      if (Number(event.target.value) === 0) {
+        document
+          .getElementById('itemsPerPageError')
+          .textContent = 'Items Per Page CANNOT be 0 😮';
+        
+        clearErrorDiv(5, 'itemsPerPageError');
+      }
       else {
-        setSliceSize(event.target.value);
-        window.localStorage.setItem('itemsPerPage', String(event.target.value));
+        setSliceSize(Math.ceil(event.target.value));
+        window
+          .localStorage
+          .setItem(
+            'itemsPerPage', 
+            String(Math.ceil(event.target.value))
+          );
+        // Force page reload with new changes in effect.
         window.location.reload();
       }
       
+      // Clear up the input field in readiness for next input.
       event.target.value = '';
-    }
-  } // sliceSizeHandler
-
-  const onChangeHandler = () => {
-    setIPPError('');
-  } // onChangeHandler
+    } // if
+  }; // sliceSizeHandler
 
 
   return (
     <>
       <div>
-        <div id="itemsPerPageError">{iPPError && iPPError}</div>
+        <div id="itemsPerPageError" style={{ color: "red" }}></div>
         <input 
           placeholder="Items Per Page" 
           type="text"
           className="items-per-page"
-          onChange = { onChangeHandler }
           onKeyUp={ event => sliceSizeHandler(event) }
           style={
             {
               textAlign: 'center',
               margin: '3px 0',
-              marginRight: '5px',
+              marginRight: '1px',
               backgroundColor: 'black',
               padding: '2px',
               color: 'orange',
@@ -210,12 +231,17 @@ function Countries({ history }) {
               width: '180px'
             }
           }
-        />{itemsPerPage || 12}
+        /><span style={{
+            color: "#F50057",
+            fontSize: '1.1em',
+          }}>
+            <strong>{itemsPerPage || 12}</strong>
+          </span>
       </div>
       
       <div>
         <Paginator 
-          pageSize= { sliceSize } 
+          pageSize={ sliceSize } 
           dataArray={ countries }
           validateSliceSize={ validateSliceSize }
         />
@@ -248,8 +274,8 @@ function Countries({ history }) {
           >
             {` next >>> `}
           </Button>
-        </div> <br/><br/>
-      </div>
+        </div> 
+      </div> <br/><br/>
       
       <div className="countries">
         {countries &&
