@@ -7,7 +7,7 @@ import { CountriesContext } from "../contexts/CountriesContext";
 
 // Helper
 import HashTable from "../utils/hashTable";
-
+import clearErrorDiv from '../utils/clearErrorDiv';
 
 function CountriesList({ history }) {
   const { countries } = useContext(CountriesContext);
@@ -32,33 +32,6 @@ function CountriesList({ history }) {
   // console.log(Array.isArray(countriesHT.table));
   // console.log(history);
   
-  
-  /**
-   * clearErrorDiv is a helper function that clears the 
-   * errorDiv below after duration(seconds) has elapsed 
-   * It's called by searchCountry in case the search key 
-   * supplied to the search field did not match the 
-   * characters contained in any country name. 
-   * 
-   * @param {*} duration
-   * @returns undefined
-   */
-  function clearErrorDiv(duration) {
-    if (
-      document.getElementById("countryError").textContent !== ""
-    ) {
-      const timer = setInterval(() => {
-        duration -= 1;
-        if (duration ===0) {
-          document.getElementById("countryError").textContent = ""
-          clearInterval(timer);
-          return;
-        }
-      }, 1000);
-    }
-  } // clearErrorDiv
-
-
   function searchCountry(country) {
     console.log("searchCountry invoked..");
     // Call when either an item (country) is selected, or enter is pressed.
@@ -154,7 +127,7 @@ function CountriesList({ history }) {
         document.getElementById(
           "countryError"
         ).innerHTML = `<strong>${country}</strong> is probably not a valid country name!`;
-        clearErrorDiv(5);
+        clearErrorDiv(5, 'countryError');
       }
     }
   } // searchCountry
@@ -171,6 +144,7 @@ function CountriesList({ history }) {
     }
     // event.target.value =  '';
   }; // onKeyPressHandler
+
 
   return (
     <div>
@@ -197,6 +171,7 @@ function CountriesList({ history }) {
 
 export default withRouter(CountriesList);
 
+
 /* 
 // Datalist reference
 // https://stackoverflow.com/questions/23647359/how-do-i-get-the-change-event-for-a-datalist/50389035
@@ -215,3 +190,13 @@ $(document).on('change', 'input', function(){
 // https://stackoverflow.com/questions/30022728/perform-action-when-clicking-html5-datalist-option/32205204#32205204
 
 */
+
+
+  /* 
+  // Helper reference to customize
+  $(document).ready(function() {
+    $("[list='my-list']").on("input propertychange", function() {
+      window.location = $("#my-list option[value='"+$("[list='my-list']").val()+"']").find("a").attr("href")
+    });
+  }); 
+  */
