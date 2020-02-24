@@ -5,6 +5,9 @@ import { withRouter } from 'react-router-dom';
 // Service
 import AuthService from '../services/auth.service';
 
+// Helper
+import clearErrorDiv from '../utils/clearErrorDiv';
+
 // Material UI stuff
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -53,15 +56,17 @@ function SignIn(props) {
   const [password, setPassword] = useState('');
   */
 
+  // Global error object to keep track of sign-in errors.
+  const inputErrors = {};
+  
   // What follows is the scalable way of handling state.
   const initialState = {
     email: '',
     password: ''
   };
-
+  
   const [state, setState] = useState({ ...initialState });
-
-
+  
   /* 
   // This section demonstrates the non-scalable way of handling 
   // user input and is left here for reference and comparison.
@@ -99,14 +104,93 @@ function SignIn(props) {
     });
   } // inputHandler
 
-  const submitInput = event => {
-    event.preventDefault(); // Prevent form submission
+  /**
+   * submitInput is an impure function that attempts to log
+   * the user in by sending their credentials to the back end.
+   *   
+   * @param {*} event
+   * @returns undefined
+   */
+  const submitInput = async event => {
+    event.preventDefault(); // Prevent form submission.
+    
+    validateForm(state);
+
+    //---------👇 for visualization only--------
     console.log(state);
+    if (Object.keys(inputErrors).length) {
+      console.log(inputErrors);
+    }
+    //----------you may delete this ☝️----------
+    
+    // Halt the login process if any errors were found
+    // during validation i.e. validateForm(state).
+    if (Object.keys(inputErrors).length) return;
 
-    // Post login data to the server to log user in
-    AuthService.login(state);
+    // Post login data to the server to log user in.
+    try {
+      const loggedIn = await AuthService.login(state);
+      
+      // Something went wrong server-side.
+      if (loggedIn !== true) {
+        throw 'Login Error'
+      }
+    } catch(err) {
+      document
+        .getElementById("loginError")
+        .textContent = 'Check your Email & Password';
+      
+      // Clear div with id "loginError" after 3 seconds.
+      clearErrorDiv(3, "loginError");
+    }
+  }; // submitInput
 
-  } // submitInput
+  /**
+   * validateForm is an impure function that checks user input
+   * for errors and populates the inputErrors object if so.
+   *
+   * @param {*} rawState
+   */
+  const validateForm = rawState => {
+
+    // Validate email
+    // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript/46181#46181
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!emailRegex.test(rawState.email)) {
+      inputErrors.email = 'Invalid Email';
+    }
+    
+    if (rawState.email.length === 0) {
+      inputErrors.email = 'Email Required';
+    }
+
+    
+    if (!rawState.password) {
+      inputErrors.password = 'Password Required';
+    }
+
+    if (
+      rawState.password.length > 0 && 
+      rawState.password.length < 8
+    ) {
+      inputErrors.password = 'Password Must be 8 or more characters.';
+    }
+
+    if (inputErrors.email) {
+      document
+        .getElementById("emailError")
+        .textContent = inputErrors.email;
+      clearErrorDiv(3, "emailError");
+    }
+
+    if (inputErrors.password) {
+      document
+        .getElementById("passwordError")
+        .textContent = inputErrors.password;
+      clearErrorDiv(3, "passwordError");
+    }
+  }; // validateForm
+
 
   return (
     <Container component="main" maxWidth="xs">
@@ -123,7 +207,7 @@ function SignIn(props) {
         Make form input handling dynamic and scalable.
 
         Below, the non-scalable way of handling input for 
-        each field separately is given up.
+        each field separately is given up (commented out).
 
         A dynamic inputHandler is adopted instead.
         */}
@@ -144,7 +228,7 @@ function SignIn(props) {
             value={state.email}
             // onChange={ onEmailChange }
             onChange={ inputHandler }
-          />
+          /><div id="emailError" style={{ color: "red" }}></div>
  
           <TextField
             variant="outlined"
@@ -156,12 +240,22 @@ function SignIn(props) {
             label="Password"
             name="password"
             placeholder="StrongPassword"
-            autoComplete="current-password"
             // value={password}
             value={state.password}
             // onChange={ onPasswordChange }
             onChange={ inputHandler }
-          />
+          /><div id="passwordError" style={{ color: "red" }}>
+            </div>
+            <div 
+              id="loginError" 
+              style={
+                { 
+                  color: "red",
+                  fontWeight: '800'
+                }
+              }
+            >
+            </div>
  
           <Button
             color="primary"
