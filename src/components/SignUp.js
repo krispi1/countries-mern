@@ -4,6 +4,9 @@ import React, { useState } from 'react';
 // Service
 import AuthService from '../services/auth.service';
 
+// Helper
+import clearErrorDiv from '../utils/clearErrorDiv';
+
 // Material UI stuff
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
@@ -40,15 +43,21 @@ const useStyles = makeStyles(theme => ({
 
 function SignUp() {
   console.log('SignUp rendering...');
+
   const classes = useStyles();
 
+  // Global error object to keep track of sign-up errors.
+  const inputErrors = {};
+  
   const initialState = {
     username: '',
     email: '',
-    password: ''
+    password: '',
+    confirmPassword: ''
   }
 
   const [state, setState] = useState(initialState);
+  // const [confirmPassword, setConfirmPassword] = useState('');
 
   // For the sake of scalability, it's better to create a 
   // single dynamic input handler that caters to each input 
@@ -61,16 +70,135 @@ function SignUp() {
       ...state,
       [event.target.name]: event.target.value
     });
-  } // inputHandler
 
-  const submitInput = event => {
+    // if (event.target.name === 'confirm-password') {
+    //   setConfirmPassword(event.target.value);
+    // }
+}; // inputHandler
+
+  const submitInput = async event => {
     event.preventDefault(); // Prevent form submission
-    console.log(state);
+    
+    validateForm(state);
 
-    // Post login data to the server to log user in
-    AuthService.signup(state);
-    setState({ ...initialState });
-  } // submitInput
+    //---------👇 for visualization only--------
+    console.log(state);
+    if (Object.keys(inputErrors).length) {
+      console.log(inputErrors);
+    }
+    //----------you may delete this ☝️----------
+
+    // Halt the sign up process if any errors were found
+    // during validation i.e. validateForm(state).
+    if (Object.keys(inputErrors).length) return;
+    
+    // Post form data to the server to sign user up
+    try {
+      const signedUp = await AuthService.signup(state);
+      
+      console.log('--signedUp--');
+      console.log(signedUp);
+
+      // Something went wrong server-side.
+      if (signedUp !== true) {
+        throw 'Sign Up Error'
+      }
+    } catch(err) {
+      document
+        .getElementById("signUpError")
+        .textContent = 'Either Username or Email already taken!';
+      
+      // Clear div with id "signUpError" after 3 seconds.
+      clearErrorDiv(3, "signUpError");
+    }
+  }; // submitInput
+
+  /**
+   * validateForm is an impure function that checks user input
+   * for errors and populates the inputErrors object if found.
+   *
+   * @param {*} rawState
+   */
+  const validateForm = rawState => {
+    
+    if (rawState.username.length < 3) {
+      inputErrors.username = 'Username Too Short';
+    }
+    
+    if (!rawState.username) {
+      inputErrors.username = 'Username Required';
+    }
+
+    // Validate email
+    // https://stackoverflow.com/questions/46155/how-to-validate-an-email-address-in-javascript/46181#46181
+    const emailRegex = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    if (!emailRegex.test(rawState.email)) {
+      inputErrors.email = 'Invalid Email';
+    }
+    
+    if (rawState.email.length === 0) {
+      inputErrors.email = 'Email Required';
+    }
+    
+    if (!rawState.password) {
+      inputErrors.password = 'Password Required';
+    }
+
+    if (
+      rawState.password.length > 0 && 
+      rawState.password.length < 8
+    ) {
+      inputErrors.password = 'Password MUST be 8 or more characters.';
+    }
+
+    if (
+      rawState.confirmPassword.length > 0 &&
+      rawState.password !== rawState.confirmPassword
+    ) {
+      inputErrors.confirmPassword = 'Passwords Do Not Match';
+    }
+    console.log('--confirmPassword--')
+    console.log(rawState.confirmPassword.length)
+
+    if (rawState.confirmPassword.length === 0) {
+      inputErrors.confirmPassword = 'Confirm Password Required';
+    }
+
+    if (
+      rawState.confirmPassword.length > 0 && 
+      rawState.confirmPassword.length < 8
+    ) {
+      inputErrors.confirmPassword = 'Password MUST be 8 or more characters.';
+    }
+
+    if (inputErrors.username) {
+      document
+        .getElementById("usernameError")
+        .textContent = inputErrors.username;
+      clearErrorDiv(2, "usernameError");
+    }
+
+    if (inputErrors.email) {
+      document
+        .getElementById("emailError")
+        .textContent = inputErrors.email;
+      clearErrorDiv(3, "emailError");
+    }
+
+    if (inputErrors.password) {
+      document
+        .getElementById("passwordError")
+        .textContent = inputErrors.password;
+      clearErrorDiv(4, "passwordError");
+    }
+
+    if (inputErrors.confirmPassword) {
+      document
+        .getElementById("pswdMatchError")
+        .textContent = inputErrors.confirmPassword;
+      clearErrorDiv(5, "pswdMatchError");
+    }
+  }; // validateForm
 
 
   return (
@@ -101,7 +229,7 @@ function SignUp() {
                 placeholder="johndoe"
                 value={state.username}
                 onChange={ inputHandler }
-              />
+              /><div id="usernameError" style={{ color: "red" }}></div>
             </Grid>
 
             <Grid item xs={12}>
@@ -116,7 +244,7 @@ function SignUp() {
                 placeholder="johndoe@email.com"
                 value={state.email}
                 onChange={ inputHandler }
-              />
+              /><div id="emailError" style={{ color: "red" }}></div>
             </Grid>
 
             <Grid item xs={12}>
@@ -132,7 +260,7 @@ function SignUp() {
                 placeholder="StrongPassword"
                 value={state.password}
                 onChange={ inputHandler }
-              />
+              /><div id="passwordError" style={{ color: "red" }}></div>
             </Grid>
 
             <Grid item xs={12}>
@@ -140,13 +268,27 @@ function SignUp() {
                 variant="outlined"
                 required
                 fullWidth
-                name="confirm-password"
+                name="confirmPassword"
                 label="Confirm Password"
                 type="password"
                 id="confirmPassword"
                 autoComplete="current-password"
                 placeholder="StrongPassword"
-              />
+                value={state.confirmPassword}
+                onChange={ inputHandler }
+              /><div id="pswdMatchError" style={{ color: "red" }}></div>
+                <div
+                  id="signUpError" 
+                  style={
+                    { 
+                      marginTop: '3px',
+                      color: "red",
+                      fontSize: '1.2em',
+                      fontWeight: '600'
+                    }
+                  }
+                >
+                </div>
             </Grid>
 
             <Grid item xs={12}>
