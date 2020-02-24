@@ -138,7 +138,7 @@ function SignIn(props) {
     } catch(err) {
       document
         .getElementById("loginError")
-        .textContent = 'Check your Email & Password';
+        .textContent = 'Check your Email or Password';
       
       // Clear div with id "loginError" after 3 seconds.
       clearErrorDiv(3, "loginError");
@@ -147,7 +147,7 @@ function SignIn(props) {
 
   /**
    * validateForm is an impure function that checks user input
-   * for errors and populates the inputErrors object if so.
+   * for errors and populates the inputErrors object if found.
    *
    * @param {*} rawState
    */
@@ -163,7 +163,6 @@ function SignIn(props) {
     if (rawState.email.length === 0) {
       inputErrors.email = 'Email Required';
     }
-
     
     if (!rawState.password) {
       inputErrors.password = 'Password Required';
@@ -187,7 +186,7 @@ function SignIn(props) {
       document
         .getElementById("passwordError")
         .textContent = inputErrors.password;
-      clearErrorDiv(3, "passwordError");
+      clearErrorDiv(4, "passwordError");
     }
   }; // validateForm
 
@@ -251,7 +250,8 @@ function SignIn(props) {
               style={
                 { 
                   color: "red",
-                  fontWeight: '800'
+                  fontSize: '1.2em',
+                  fontWeight: '600'
                 }
               }
             >
