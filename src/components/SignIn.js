@@ -116,12 +116,12 @@ function SignIn(props) {
     
     validateForm(state);
 
-    //---------👇 for visualization only--------
+    //---------👇 block for visualization only--------
     console.log(state);
     if (Object.keys(inputErrors).length) {
       console.log(inputErrors);
     }
-    //----------you may delete this ☝️----------
+    //----------you may delete this ☝️ block----------
     
     // Halt the login process if any errors were found
     // during validation i.e. validateForm(state).
@@ -179,6 +179,7 @@ function SignIn(props) {
       document
         .getElementById("emailError")
         .textContent = inputErrors.email;
+
       clearErrorDiv(3, "emailError");
     }
 
@@ -186,6 +187,7 @@ function SignIn(props) {
       document
         .getElementById("passwordError")
         .textContent = inputErrors.password;
+
       clearErrorDiv(4, "passwordError");
     }
   }; // validateForm

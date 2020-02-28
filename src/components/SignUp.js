@@ -57,7 +57,6 @@ function SignUp() {
   }
 
   const [state, setState] = useState(initialState);
-  // const [confirmPassword, setConfirmPassword] = useState('');
 
   // For the sake of scalability, it's better to create a 
   // single dynamic input handler that caters to each input 
@@ -70,34 +69,32 @@ function SignUp() {
       ...state,
       [event.target.name]: event.target.value
     });
-
-    // if (event.target.name === 'confirm-password') {
-    //   setConfirmPassword(event.target.value);
-    // }
-}; // inputHandler
+  }; // inputHandler
 
   const submitInput = async event => {
     event.preventDefault(); // Prevent form submission
     
     validateForm(state);
 
-    //---------👇 for visualization only--------
+    //---------👇 block for visualization only--------
     console.log(state);
     if (Object.keys(inputErrors).length) {
       console.log(inputErrors);
     }
-    //----------you may delete this ☝️----------
+    //----------you may delete this ☝️ block----------
 
     // Halt the sign up process if any errors were found
     // during validation i.e. validateForm(state).
     if (Object.keys(inputErrors).length) return;
     
-    // Post form data to the server to sign user up
+    // Post form data to the server to attempt signing user up.
     try {
       const signedUp = await AuthService.signup(state);
       
+      //---------👇 block for visualization only--------
       console.log('--signedUp--');
       console.log(signedUp);
+      //----------you may delete this ☝️ block----------
 
       // Something went wrong server-side.
       if (signedUp !== true) {
@@ -157,8 +154,11 @@ function SignUp() {
     ) {
       inputErrors.confirmPassword = 'Passwords Do Not Match';
     }
+
+    //---------👇 block for visualization only--------
     console.log('--confirmPassword--')
     console.log(rawState.confirmPassword.length)
+    //----------you may delete this ☝️ block----------
 
     if (rawState.confirmPassword.length === 0) {
       inputErrors.confirmPassword = 'Confirm Password Required';
@@ -175,6 +175,7 @@ function SignUp() {
       document
         .getElementById("usernameError")
         .textContent = inputErrors.username;
+      
       clearErrorDiv(2, "usernameError");
     }
 
@@ -182,6 +183,7 @@ function SignUp() {
       document
         .getElementById("emailError")
         .textContent = inputErrors.email;
+      
       clearErrorDiv(3, "emailError");
     }
 
@@ -189,6 +191,7 @@ function SignUp() {
       document
         .getElementById("passwordError")
         .textContent = inputErrors.password;
+      
       clearErrorDiv(4, "passwordError");
     }
 
@@ -196,6 +199,7 @@ function SignUp() {
       document
         .getElementById("pswdMatchError")
         .textContent = inputErrors.confirmPassword;
+      
       clearErrorDiv(5, "pswdMatchError");
     }
   }; // validateForm
