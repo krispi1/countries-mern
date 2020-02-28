@@ -87,8 +87,10 @@ function Countries({ history }) {
     }
     const chunkSize = validateSliceSize(sliceSizeInput, dataArray);
 
+    //---------👇 block for visualization only--------
     console.log('--chunkSize--')
     console.log(chunkSize)
+    //----------you may delete this ☝️ block----------
     let start = sliceStart + chunkSize;
     let end   = sliceEnd + chunkSize;
 
@@ -104,6 +106,7 @@ function Countries({ history }) {
       return;
     }
 
+    //---------👇 block for visualization only--------
     // For visualization
     console.log('--nxt chunkSize--')
     console.log(chunkSize)
@@ -113,6 +116,7 @@ function Countries({ history }) {
     console.log(end)
     console.log()
     console.log()
+    //----------you may delete this ☝️ block----------
 
     setSliceStart(Math.floor(start));
     setSliceEnd(Math.floor(end));
@@ -153,6 +157,7 @@ function Countries({ history }) {
       return;
     }
 
+    //---------👇 block for visualization only--------
     // For visualization
     console.log('--prv chunkSize--')
     console.log(chunkSize)
@@ -160,6 +165,7 @@ function Countries({ history }) {
     console.log(start)
     console.log('--prv end--')
     console.log(end)
+    //----------you may delete this ☝️ block----------
 
     setSliceStart(Math.floor(start));
     setSliceEnd(Math.floor(end));
@@ -212,7 +218,10 @@ function Countries({ history }) {
   return (
     <>
       <div>
-        <div id="itemsPerPageError" style={{ color: "red" }}></div>
+        <div 
+          id="itemsPerPageError" 
+          style={{ margin: "3px 0", color: "red" }}
+        ></div>
         <input 
           placeholder="Items Per Page" 
           type="text"
@@ -221,7 +230,7 @@ function Countries({ history }) {
           style={
             {
               textAlign: 'center',
-              margin: '3px 0',
+              marginBottom: '3px',
               marginRight: '1px',
               backgroundColor: 'black',
               padding: '2px',
