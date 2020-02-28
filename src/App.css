@@ -1,10 +1,7 @@
-.App {
-  text-align: center;
-}
-
 .App-logo {
   height: 4vmin;
   pointer-events: none;
+  margin-top: 2px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -17,9 +14,24 @@
   background-color: #282c34;
   min-height: 6vh;
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
+  flex-direction: row;
+  padding: 0 3px;
+  padding-top: 5px;
+  /* align-items: center; */
+  justify-content: space-between;
+}
+
+.smiley{
+  float: left;
+  margin-left: 5px;
+  color: #F50057
+}
+
+.user-span {
+  float: right;
+  top: 0;
+  margin-right: 5px;
+  color: #F50057
 }
 
 @keyframes App-logo-spin {
