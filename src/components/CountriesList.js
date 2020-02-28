@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom";
 // Context
 import { CountriesContext } from "../contexts/CountriesContext";
 
-// Helper
+// Helpers
 import HashTable from "../utils/hashTable";
 import clearErrorDiv from '../utils/clearErrorDiv';
 
@@ -46,6 +46,7 @@ function CountriesList({ history }) {
       return;
     }
 
+    //---------👇 block for visualization only--------
     // Troubleshooting
     console.log("\n>>>>searchTerm<<<<");
     console.log(country);
@@ -59,9 +60,11 @@ function CountriesList({ history }) {
     console.log("--result from--countriesHT.getItem(formatted_SearchTerm)--");
     console.log(countriesHT.getItem(country));
     console.log("");
+    //----------you may delete this ☝️ block----------
 
     let targetCountry = countriesHT.getItem(country);
 
+    //---------👇 block for visualization only--------
     // Troubleshooting
     console.log(typeof targetCountry);
     console.log(String(targetCountry));
@@ -76,6 +79,7 @@ function CountriesList({ history }) {
     if (String(typeof targetCountry) === 'object') {
       console.log('----erratic object----');
     }
+    //----------you may delete this ☝️ block----------
 
     // Failing gracefully without crashing the app is really
     // key. This try{}catch(){} block addresses exactly that.
@@ -104,11 +108,13 @@ function CountriesList({ history }) {
           return item.name.toLowerCase().includes(country.toLowerCase());
         });
 
+        //---------👇 block for visualization only--------
         // Troubleshooting
         console.log("--lrCountry--");
         console.log(lrCountry);
         console.log("--lrCountry[0]--");
         console.log(lrCountry[0]);
+        //----------you may delete this ☝️ block----------
 
         const countryURL = `/countries/${lrCountry[0].name.toLowerCase()}`;
         history.push(countryURL); // Navigate to country's page
@@ -158,7 +164,10 @@ function CountriesList({ history }) {
         onKeyPress={onKeyPressHandler}
         onChange={event => onChangeHandler(event)}
       />
-      <div id="countryError" style={{ marginTop: "5px", color: "red" }}></div>
+      <div 
+        id="countryError" 
+        style={{ margin: "3px 0", color: "red" }}
+      ></div>
       <datalist id="countriesList" style={{ height: "300px" }}>
         {countries &&
           countries.map((country, index) => (
