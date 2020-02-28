@@ -54,7 +54,11 @@ function CountriesList({ history }) {
     console.log(String(country)[0].toUpperCase());
     console.log(">>>>String(searchTerm).slice[1]<<<<");
     console.log(country.slice(1));
+    //----------you may delete this ☝️ block----------
+    
     country = String(country)[0].toUpperCase() + String(country).slice(1);
+    
+    //---------👇 block for visualization only--------
     console.log(">>>>formatted_SearchTerm<<<<");
     console.log(country);
     console.log("--result from--countriesHT.getItem(formatted_SearchTerm)--");
@@ -62,7 +66,7 @@ function CountriesList({ history }) {
     console.log("");
     //----------you may delete this ☝️ block----------
 
-    let targetCountry = countriesHT.getItem(country);
+    let targetCountry = countriesHT.getItem(country);   
 
     //---------👇 block for visualization only--------
     // Troubleshooting
