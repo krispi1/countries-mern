@@ -164,7 +164,7 @@ code {
 
 
 /************************Navbar.js************************/
-.nav-header{
+.nav-menu{
   background-color: rgb(99, 99, 99);
   padding-top: 3px;
   height: 30px;
@@ -228,13 +228,12 @@ code {
     flex-direction: column;
     border-bottom: #000 2px solid;
   }
-
-} 
+}
 /* end Extra small devices */
 
 /* Small devices (portrait tablets and large phones, 630px and up) */
 @media only screen and (min-width: 631px) {
-  .nav-header {
+  .nav-menu {
     display: none;
   }  
 }
