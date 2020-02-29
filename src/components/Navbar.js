@@ -36,11 +36,6 @@ function Navbar({ history }) {
                 </Link>
               </div>
               <div>
-                <Link className="links-in-navbar" to="/samplelogin">
-                  TestAccount
-                </Link>
-              </div>
-              <div>
                 <Link className="links-in-navbar" to="/goodies">
                   Goodies
                 </Link>
@@ -61,11 +56,6 @@ function Navbar({ history }) {
               <div>
                 <Link className="links-in-navbar" to="/">
                   Home
-                </Link>
-              </div>
-              <div>
-                <Link className="links-in-navbar" to="/samplelogin">
-                  TestAccount
                 </Link>
               </div>
               <div>
@@ -102,11 +92,6 @@ function Navbar({ history }) {
                 </Link>
               </div>
               <div>
-                <Link className="links-in-navbar" to="/samplelogin">
-                  TestAccount
-                </Link>
-              </div>
-              <div>
                 <Link className="links-in-navbar" to="/goodies">
                   Goodies
                 </Link>
@@ -127,11 +112,6 @@ function Navbar({ history }) {
               <div>
                 <Link className="links-in-navbar" to="/">
                   Home
-                </Link>
-              </div>
-              <div>
-                <Link className="links-in-navbar" to="/samplelogin">
-                  TestAccount
                 </Link>
               </div>
               <div>

@@ -16,7 +16,6 @@ import { UserContext } from './contexts/UserContext';
 // Components
 import Loading from './components/Loading';
 import Navbar from './components/Navbar';
-import SampleLogin from './components/SampleLogin';
 import ViewUser from './components/User-ViewOne';
 import Users from './components/User-ViewAll';
 import Notes from './components/Note-ViewAll';
@@ -52,9 +51,6 @@ function App() {
 
       <Switch>
         <Route exact path="/" component={Countries}/>
-        <Route exact path="/samplelogin" >
-          <SampleLogin />
-        </Route>
         <PrivateRoute path="/goodies">
           <Goodies />
         </PrivateRoute>
